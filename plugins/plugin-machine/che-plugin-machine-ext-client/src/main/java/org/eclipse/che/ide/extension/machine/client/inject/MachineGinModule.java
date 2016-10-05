@@ -22,7 +22,6 @@ import org.eclipse.che.ide.api.command.CommandManager;
 import org.eclipse.che.ide.api.command.CommandType;
 import org.eclipse.che.ide.api.command.macro.CommandMacro;
 import org.eclipse.che.ide.api.extension.ExtensionGinModule;
-import org.eclipse.che.ide.api.machine.CommandPropertyValueProvider;
 import org.eclipse.che.ide.api.machine.MachineEntity;
 import org.eclipse.che.ide.api.machine.MachineManager;
 import org.eclipse.che.ide.api.outputconsole.OutputConsole;

@@ -20,11 +20,7 @@ import org.eclipse.che.api.core.model.machine.Machine;
 import org.eclipse.che.api.core.model.machine.MachineConfig;
 import org.eclipse.che.api.core.model.workspace.Workspace;
 import org.eclipse.che.api.core.model.workspace.WorkspaceRuntime;
-import org.eclipse.che.api.machine.shared.dto.CommandDto;
-import org.eclipse.che.api.machine.shared.dto.MachineConfigDto;
 import org.eclipse.che.api.machine.shared.dto.MachineDto;
-import org.eclipse.che.api.promises.client.Operation;
-import org.eclipse.che.api.promises.client.OperationException;
 import org.eclipse.che.commons.annotation.Nullable;
 import org.eclipse.che.ide.api.action.AbstractPerspectiveAction;
 import org.eclipse.che.ide.api.action.ActionEvent;
@@ -33,25 +29,17 @@ import org.eclipse.che.ide.api.action.CustomComponentAction;
 import org.eclipse.che.ide.api.action.DefaultActionGroup;
 import org.eclipse.che.ide.api.action.Presentation;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.machine.MachineServiceClient;
-import org.eclipse.che.ide.api.machine.events.WsAgentStateEvent;
-import org.eclipse.che.ide.api.machine.events.WsAgentStateHandler;
+import org.eclipse.che.ide.api.command.CommandImpl;
+import org.eclipse.che.ide.api.command.CommandManager;
+import org.eclipse.che.ide.api.command.CommandType;
+import org.eclipse.che.ide.api.command.CommandTypeRegistry;
 import org.eclipse.che.ide.api.machine.MachineEntity;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateEvent;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateHandler;
-import org.eclipse.che.ide.api.workspace.WorkspaceServiceClient;
 import org.eclipse.che.ide.api.workspace.event.WorkspaceStartedEvent;
 import org.eclipse.che.ide.api.workspace.event.WorkspaceStoppedEvent;
 import org.eclipse.che.ide.extension.machine.client.MachineLocalizationConstant;
 import org.eclipse.che.ide.extension.machine.client.MachineResources;
-import org.eclipse.che.ide.api.command.CommandManager;
-import org.eclipse.che.ide.api.command.CommandTypeRegistry;
-import org.eclipse.che.ide.api.command.CommandImpl;
-import org.eclipse.che.ide.api.command.CommandType;
-import org.eclipse.che.ide.extension.machine.client.command.CommandConfiguration;
-import org.eclipse.che.ide.extension.machine.client.command.CommandType;
-import org.eclipse.che.ide.extension.machine.client.command.CommandTypeRegistry;
-import org.eclipse.che.ide.extension.machine.client.command.edit.EditCommandsPresenter;
 import org.eclipse.che.ide.extension.machine.client.inject.factories.EntityFactory;
 import org.eclipse.che.ide.extension.machine.client.machine.MachineStateEvent;
 import org.eclipse.che.ide.ui.dropdown.DropDownListFactory;
@@ -94,14 +82,12 @@ public class SelectCommandComboBox extends AbstractPerspectiveAction implements 
     private final Map<String, Machine>        registeredMachineMap;
     private final ActionManager               actionManager;
     private final EntityFactory               entityFactory;
-    private final WorkspaceServiceClient      workspaceServiceClient;
     private final CommandManager              commandManager;
     private final CommandTypeRegistry         commandTypeRegistry;
     private final AppContext                  appContext;
     private final DropDownWidget              commandsListWidget;
     private final DropDownWidget              machinesListWidget;
     private final List<CommandImpl>           commands;
-    private final String                      workspaceId;
     private final DefaultActionGroup          commandActions;
     private final DefaultActionGroup          machinesActions;
 
@@ -115,8 +101,6 @@ public class SelectCommandComboBox extends AbstractPerspectiveAction implements 
                                  EntityFactory entityFactory,
                                  DropDownListFactory dropDownListFactory,
                                  CommandManager commandManager,
-                                 MachineServiceClient machineServiceClient,
-                                 WorkspaceServiceClient workspaceServiceClient,
                                  CommandTypeRegistry commandTypeRegistry,
                                  AppContext appContext) {
         super(Collections.singletonList(PROJECT_PERSPECTIVE_ID),
@@ -128,9 +112,7 @@ public class SelectCommandComboBox extends AbstractPerspectiveAction implements 
         this.resources = resources;
         this.actionManager = actionManager;
         this.commandManager = commandManager;
-        this.machineServiceClient = machineServiceClient;
         this.entityFactory = entityFactory;
-        this.workspaceServiceClient = workspaceServiceClient;
         this.commandTypeRegistry = commandTypeRegistry;
         this.appContext = appContext;
 

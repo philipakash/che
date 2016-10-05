@@ -45,11 +45,9 @@ import org.eclipse.che.ide.extension.machine.client.actions.RestartMachineAction
 import org.eclipse.che.ide.extension.machine.client.actions.RunCommandAction;
 import org.eclipse.che.ide.extension.machine.client.actions.SelectCommandComboBox;
 import org.eclipse.che.ide.extension.machine.client.actions.SwitchPerspectiveAction;
+import org.eclipse.che.ide.extension.machine.client.command.custom.CustomCommandType;
 import org.eclipse.che.ide.extension.machine.client.command.macros.ServerPortProvider;
 import org.eclipse.che.ide.extension.machine.client.command.producer.CommandProducerActionFactory;
-import org.eclipse.che.ide.extension.machine.client.machine.MachineStatusNotifier;
-import org.eclipse.che.ide.extension.machine.client.command.custom.CustomCommandType;
-import org.eclipse.che.ide.extension.machine.client.command.valueproviders.ServerPortProvider;
 import org.eclipse.che.ide.extension.machine.client.machine.MachineStatusHandler;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.CloseConsoleAction;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.ReRunProcessAction;
