@@ -15,6 +15,23 @@ import io.typefox.lsapi.CompletionItem;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import org.eclipse.che.api.languageserver.shared.lsapi.CompletionItemDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.DidChangeTextDocumentParamsDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.DidCloseTextDocumentParamsDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.DidOpenTextDocumentParamsDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.DidSaveTextDocumentParamsDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.DocumentFormattingParamsDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.DocumentOnTypeFormattingParamsDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.DocumentRangeFormattingParamsDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.DocumentSymbolParamsDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.HoverDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.LocationDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.PublishDiagnosticsParamsDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.ReferenceParamsDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.SignatureHelpDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.SymbolInformationDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.TextDocumentPositionParamsDTO;
+import org.eclipse.che.api.languageserver.shared.lsapi.TextEditDTO;
 import org.eclipse.che.api.promises.client.Operation;
 import org.eclipse.che.api.promises.client.OperationException;
 import org.eclipse.che.api.promises.client.Promise;
@@ -31,22 +48,6 @@ import org.eclipse.che.ide.websocket.MessageBus;
 import org.eclipse.che.ide.websocket.WebSocketException;
 import org.eclipse.che.ide.websocket.rest.SubscriptionHandler;
 import org.eclipse.che.plugin.languageserver.ide.editor.PublishDiagnosticsProcessor;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.CompletionItemDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.DidChangeTextDocumentParamsDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.DidCloseTextDocumentParamsDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.DidOpenTextDocumentParamsDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.DidSaveTextDocumentParamsDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.DocumentFormattingParamsDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.DocumentOnTypeFormattingParamsDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.DocumentRangeFormattingParamsDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.DocumentSymbolParamsDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.HoverDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.LocationDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.PublishDiagnosticsParamsDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.ReferenceParamsDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.SymbolInformationDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.TextDocumentPositionParamsDTO;
-import org.eclipse.che.plugin.languageserver.shared.lsapi.TextEditDTO;
 
 import java.util.List;
 
@@ -170,6 +171,21 @@ public class TextDocumentServiceClient {
     public Promise<HoverDTO> hover(TextDocumentPositionParamsDTO params) {
         String requestUrl = appContext.getDevMachine().getWsAgentBaseUrl() + "/languageserver/textDocument/hover";
         Unmarshallable<HoverDTO> unmarshaller = unmarshallerFactory.newUnmarshaller(HoverDTO.class);
+        return asyncRequestFactory.createPostRequest(requestUrl, params)
+                                  .header(ACCEPT, APPLICATION_JSON)
+                                  .header(CONTENT_TYPE, APPLICATION_JSON)
+                                  .send(unmarshaller);
+    }
+
+    /**
+     * GWT client implementation of {@link io.typefox.lsapi.TextDocumentService#signatureHelp(io.typefox.lsapi.TextDocumentPositionParams)}
+     *
+     * @param params
+     * @return
+     */
+    public Promise<SignatureHelpDTO> signatureHelp(TextDocumentPositionParamsDTO params) {
+        String requestUrl = appContext.getDevMachine().getWsAgentBaseUrl() + "/languageserver/textDocument/signatureHelp";
+        Unmarshallable<SignatureHelpDTO> unmarshaller = unmarshallerFactory.newUnmarshaller(SignatureHelpDTO.class);
         return asyncRequestFactory.createPostRequest(requestUrl, params)
                                   .header(ACCEPT, APPLICATION_JSON)
                                   .header(CONTENT_TYPE, APPLICATION_JSON)

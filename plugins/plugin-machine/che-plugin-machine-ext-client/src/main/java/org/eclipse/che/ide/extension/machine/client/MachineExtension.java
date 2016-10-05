@@ -48,6 +48,9 @@ import org.eclipse.che.ide.extension.machine.client.actions.SwitchPerspectiveAct
 import org.eclipse.che.ide.extension.machine.client.command.macros.ServerPortProvider;
 import org.eclipse.che.ide.extension.machine.client.command.producer.CommandProducerActionFactory;
 import org.eclipse.che.ide.extension.machine.client.machine.MachineStatusNotifier;
+import org.eclipse.che.ide.extension.machine.client.command.custom.CustomCommandType;
+import org.eclipse.che.ide.extension.machine.client.command.valueproviders.ServerPortProvider;
+import org.eclipse.che.ide.extension.machine.client.machine.MachineStatusHandler;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.CloseConsoleAction;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.ReRunProcessAction;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.StopProcessAction;
@@ -96,12 +99,14 @@ public class MachineExtension {
                             final ProcessesPanelPresenter processesPanelPresenter,
                             final Provider<ServerPortProvider> machinePortProvider,
                             final PerspectiveManager perspectiveManager,
-                            final Provider<MachineStatusNotifier> machineStatusNotifierProvider,
+                            final IconRegistry iconRegistry,
+                            final CustomCommandType arbitraryCommandType,
+                            final Provider<MachineStatusHandler> machineStatusHandlerProvider,
                             final ProjectExplorerPresenter projectExplorerPresenter) {
         this.perspectiveManager = perspectiveManager;
 
         machineResources.getCss().ensureInjected();
-        machineStatusNotifierProvider.get();
+        machineStatusHandlerProvider.get();
 
         eventBus.addHandler(WsAgentStateEvent.TYPE, new WsAgentStateHandler() {
             @Override

@@ -58,23 +58,6 @@ public class MachineServiceClientImpl implements MachineServiceClient {
     }
 
     @Override
-    public Promise<MachineDto> getMachine(@NotNull final String workspaceId,
-                                          @NotNull final String machineId) {
-        return asyncRequestFactory.createGetRequest(baseHttpUrl + workspaceId + "/machine/" + machineId)
-                                  .header(ACCEPT, APPLICATION_JSON)
-                                  .loader(loaderFactory.newLoader("Getting info about machine..."))
-                                  .send(dtoUnmarshallerFactory.newUnmarshaller(MachineDto.class));
-    }
-
-    @Override
-    public Promise<List<MachineDto>> getMachines(@NotNull String workspaceId) {
-        return asyncRequestFactory.createGetRequest(baseHttpUrl + workspaceId + "/machine")
-                                  .header(ACCEPT, APPLICATION_JSON)
-                                  .loader(loaderFactory.newLoader("Getting info about bound machines..."))
-                                  .send(dtoUnmarshallerFactory.newListUnmarshaller(MachineDto.class));
-    }
-
-    @Override
     public Promise<Void> destroyMachine(@NotNull final String workspaceId,
                                         @NotNull final String machineId) {
         return asyncRequestFactory.createRequest(DELETE,
