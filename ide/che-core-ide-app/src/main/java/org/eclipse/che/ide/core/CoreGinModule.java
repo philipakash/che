@@ -30,9 +30,9 @@ import org.eclipse.che.ide.api.app.AppContext;
 import org.eclipse.che.ide.api.auth.OAuthServiceClient;
 import org.eclipse.che.ide.api.auth.OAuthServiceClientImpl;
 import org.eclipse.che.ide.api.command.CommandTypeRegistry;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
-import org.eclipse.che.ide.api.command.macro.CommandMacroRegistry;
-import org.eclipse.che.ide.api.command.macro.MacroProcessor;
+import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.MacroRegistry;
+import org.eclipse.che.ide.api.macro.MacroProcessor;
 import org.eclipse.che.ide.api.component.Component;
 import org.eclipse.che.ide.api.component.WsAgentComponent;
 import org.eclipse.che.ide.api.data.tree.NodeInterceptor;
@@ -115,8 +115,8 @@ import org.eclipse.che.ide.api.workspace.WorkspaceServiceClientImpl;
 import org.eclipse.che.ide.client.StartUpActionsProcessor;
 import org.eclipse.che.ide.client.WorkspaceStateRestorer;
 import org.eclipse.che.ide.command.CommandTypeRegistryImpl;
-import org.eclipse.che.ide.command.macro.CommandMacroRegistryImpl;
-import org.eclipse.che.ide.command.macro.MacroProcessorImpl;
+import org.eclipse.che.ide.macro.MacroRegistryImpl;
+import org.eclipse.che.ide.macro.MacroProcessorImpl;
 import org.eclipse.che.ide.context.AppContextImpl;
 import org.eclipse.che.ide.editor.EditorAgentImpl;
 import org.eclipse.che.ide.editor.EditorRegistryImpl;
@@ -494,7 +494,7 @@ public class CoreGinModule extends AbstractGinModule {
         // Command API
         bind(CommandTypeRegistry.class).to(CommandTypeRegistryImpl.class).in(Singleton.class);
 
-        bind(CommandMacroRegistry.class).to(CommandMacroRegistryImpl.class).in(Singleton.class);
+        bind(MacroRegistry.class).to(MacroRegistryImpl.class).in(Singleton.class);
 
         bind(MacroProcessor.class).to(MacroProcessorImpl.class).in(Singleton.class);
 

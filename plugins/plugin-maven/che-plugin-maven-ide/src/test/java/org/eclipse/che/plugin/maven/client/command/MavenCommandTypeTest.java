@@ -14,7 +14,7 @@ import com.google.gwtmockito.GwtMockitoTestRunner;
 
 import org.eclipse.che.ide.api.command.CommandPage;
 import org.eclipse.che.ide.api.icon.IconRegistry;
-import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathProvider;
+import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathMacro;
 import org.eclipse.che.plugin.maven.client.MavenResources;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,13 +31,13 @@ import static org.mockito.Mockito.verify;
 public class MavenCommandTypeTest {
 
     @Mock
-    private MavenResources             mavenResources;
+    private MavenResources            mavenResources;
     @Mock
-    private MavenCommandPagePresenter  mavenCommandPagePresenter;
+    private MavenCommandPagePresenter mavenCommandPagePresenter;
     @Mock
-    private CurrentProjectPathProvider currentProjectPathProvider;
+    private CurrentProjectPathMacro   currentProjectPathMacro;
     @Mock
-    private IconRegistry               iconRegistry;
+    private IconRegistry              iconRegistry;
 
     @InjectMocks
     private MavenCommandType mavenCommandType;
@@ -53,6 +53,6 @@ public class MavenCommandTypeTest {
     public void testGettingCommandTemplate() throws Exception {
         mavenCommandType.getCommandLineTemplate();
 
-        verify(currentProjectPathProvider).getName();
+        verify(currentProjectPathMacro).getName();
     }
 }

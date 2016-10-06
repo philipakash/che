@@ -19,7 +19,7 @@ import org.eclipse.che.api.promises.client.FunctionException;
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.PromiseProvider;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.CommandMacro;
 import org.eclipse.che.ide.api.resources.Project;
 import org.eclipse.che.ide.api.resources.Resource;
 import org.eclipse.che.ide.ext.java.client.command.ClasspathContainer;
@@ -39,7 +39,7 @@ import static org.eclipse.che.ide.ext.java.shared.ClasspathEntryKind.LIBRARY;
  * @author Valeriy Svydenko
  */
 @Singleton
-public class ClasspathProvider implements CommandMacro {
+public class ClasspathMacro implements CommandMacro {
 
     private static final String KEY = "${project.java.classpath}";
 
@@ -49,10 +49,10 @@ public class ClasspathProvider implements CommandMacro {
     private final PromiseProvider    promises;
 
     @Inject
-    public ClasspathProvider(ClasspathContainer classpathContainer,
-                             ClasspathResolver classpathResolver,
-                             AppContext appContext,
-                             PromiseProvider promises) {
+    public ClasspathMacro(ClasspathContainer classpathContainer,
+                          ClasspathResolver classpathResolver,
+                          AppContext appContext,
+                          PromiseProvider promises) {
         this.classpathContainer = classpathContainer;
         this.classpathResolver = classpathResolver;
         this.appContext = appContext;

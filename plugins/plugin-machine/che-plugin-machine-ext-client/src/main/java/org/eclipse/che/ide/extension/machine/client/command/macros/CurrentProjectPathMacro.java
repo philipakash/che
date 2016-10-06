@@ -16,7 +16,7 @@ import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
 import org.eclipse.che.api.promises.client.PromiseProvider;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.CommandMacro;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateEvent;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateHandler;
 import org.eclipse.che.api.promises.client.Promise;
@@ -34,7 +34,7 @@ import javax.validation.constraints.NotNull;
  * @author Vlad Zhukovskyi
  */
 @Singleton
-public class CurrentProjectPathProvider implements CommandMacro, WsAgentStateHandler {
+public class CurrentProjectPathMacro implements CommandMacro, WsAgentStateHandler {
 
     private static final String KEY = "${current.project.path}";
 
@@ -44,7 +44,7 @@ public class CurrentProjectPathProvider implements CommandMacro, WsAgentStateHan
     private String value;
 
     @Inject
-    public CurrentProjectPathProvider(EventBus eventBus, AppContext appContext, PromiseProvider promises) {
+    public CurrentProjectPathMacro(EventBus eventBus, AppContext appContext, PromiseProvider promises) {
         this.appContext = appContext;
         this.promises = promises;
         value = "";

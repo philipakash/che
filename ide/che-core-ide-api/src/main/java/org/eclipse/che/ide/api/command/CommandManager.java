@@ -12,7 +12,7 @@ package org.eclipse.che.ide.api.command;
 
 import org.eclipse.che.api.core.model.machine.Machine;
 import org.eclipse.che.api.promises.client.Promise;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.CommandMacro;
 
 import java.util.List;
 import java.util.Map;

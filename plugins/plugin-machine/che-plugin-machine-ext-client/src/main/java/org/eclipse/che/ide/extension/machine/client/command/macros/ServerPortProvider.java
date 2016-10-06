@@ -20,8 +20,8 @@ import org.eclipse.che.api.core.model.machine.Server;
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.js.Promises;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
-import org.eclipse.che.ide.api.command.macro.CommandMacroRegistry;
+import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateEvent;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateHandler;
 
@@ -38,14 +38,14 @@ public class ServerPortProvider implements WsAgentStateHandler {
 
     public static final String KEY_TEMPLATE = "${server.port.%}";
 
-    private final CommandMacroRegistry commandPropertyRegistry;
-    private final AppContext           appContext;
+    private final MacroRegistry commandPropertyRegistry;
+    private final AppContext    appContext;
 
     private Set<CommandMacro> providers;
 
     @Inject
     public ServerPortProvider(EventBus eventBus,
-                              CommandMacroRegistry commandPropertyRegistry,
+                              MacroRegistry commandPropertyRegistry,
                               AppContext appContext) {
         this.commandPropertyRegistry = commandPropertyRegistry;
         this.appContext = appContext;
@@ -66,13 +66,13 @@ public class ServerPortProvider implements WsAgentStateHandler {
     private Set<CommandMacro> getProviders(Machine machine) {
         Set<CommandMacro> providers = Sets.newHashSet();
         for (Map.Entry<String, ? extends Server> entry : machine.getRuntime().getServers().entrySet()) {
-            providers.add(new AddressProvider(entry.getKey(),
-                                              entry.getValue().getAddress(),
-                                              entry.getKey()));
+            providers.add(new AddressMacro(entry.getKey(),
+                                           entry.getValue().getAddress(),
+                                           entry.getKey()));
 
             if (entry.getKey().endsWith("/tcp")) {
-                providers.add(new AddressProvider(entry.getKey().substring(0, entry.getKey().length() - 4),
-                                                  entry.getValue().getAddress(), entry.getKey()));
+                providers.add(new AddressMacro(entry.getKey().substring(0, entry.getKey().length() - 4),
+                                               entry.getValue().getAddress(), entry.getKey()));
             }
         }
 
@@ -93,13 +93,13 @@ public class ServerPortProvider implements WsAgentStateHandler {
         providers.clear();
     }
 
-    private class AddressProvider implements CommandMacro {
+    private class AddressMacro implements CommandMacro {
 
         String variable;
         String address;
         String description;
 
-        AddressProvider(String internalPort, String address, String description) {
+        AddressMacro(String internalPort, String address, String description) {
             this.variable = KEY_TEMPLATE.replaceAll("%", internalPort);
             this.address = address;
             this.description = description;

@@ -20,11 +20,11 @@ import org.eclipse.che.api.machine.shared.Constants;
 import org.eclipse.che.api.promises.client.Operation;
 import org.eclipse.che.api.promises.client.OperationException;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
-import org.eclipse.che.ide.api.command.macro.CommandMacroRegistry;
+import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.api.machine.DevMachine;
-import org.eclipse.che.ide.command.macro.CustomCommandMacro;
-import org.eclipse.che.ide.command.macro.ServerMacro;
+import org.eclipse.che.ide.macro.CustomCommandMacro;
+import org.eclipse.che.ide.macro.ServerMacro;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +50,7 @@ public class ServerMacroTest {
     public static final String ADDRESS       = "127.0.0.1";
 
     @Mock
-    private CommandMacroRegistry commandMacroRegistry;
+    private MacroRegistry macroRegistry;
 
     @Mock
     private EventBus eventBus;
@@ -74,7 +74,7 @@ public class ServerMacroTest {
 
     @Before
     public void setUp() throws Exception {
-        provider = new ServerMacro(commandMacroRegistry, eventBus, appContext);
+        provider = new ServerMacro(macroRegistry, eventBus, appContext);
 
         registerProvider();
     }

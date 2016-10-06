@@ -43,9 +43,9 @@ import static org.mockito.Mockito.when;
  * @author Valeriy Svydenko
  */
 @RunWith(GwtMockitoTestRunner.class)
-public class OutputDirProviderTest {
+public class OutputDirMacroTest {
     @InjectMocks
-    private OutputDirProvider provider;
+    private OutputDirMacro provider;
 
     @Mock
     private AppContext      appContext;

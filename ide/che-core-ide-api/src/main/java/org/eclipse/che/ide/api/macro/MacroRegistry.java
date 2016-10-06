@@ -8,7 +8,7 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.api.command.macro;
+package org.eclipse.che.ide.api.macro;
 
 import java.util.List;
 import java.util.Set;
@@ -19,7 +19,7 @@ import java.util.Set;
  * @author Artem Zatsarynnyi
  * @see CommandMacro
  */
-public interface CommandMacroRegistry {
+public interface MacroRegistry {
 
     /** Register set of macros. */
     void register(Set<CommandMacro> macros);

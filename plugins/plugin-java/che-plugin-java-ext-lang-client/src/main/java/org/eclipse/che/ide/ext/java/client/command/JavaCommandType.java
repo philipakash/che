@@ -19,10 +19,10 @@ import org.eclipse.che.ide.api.icon.Icon;
 import org.eclipse.che.ide.api.icon.IconRegistry;
 import org.eclipse.che.ide.ext.java.client.JavaLocalizationConstant;
 import org.eclipse.che.ide.ext.java.client.JavaResources;
-import org.eclipse.che.ide.ext.java.client.command.valueproviders.ClasspathProvider;
-import org.eclipse.che.ide.ext.java.client.command.valueproviders.OutputDirProvider;
-import org.eclipse.che.ide.ext.java.client.command.valueproviders.SourcepathProvider;
-import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathProvider;
+import org.eclipse.che.ide.ext.java.client.command.valueproviders.ClasspathMacro;
+import org.eclipse.che.ide.ext.java.client.command.valueproviders.OutputDirMacro;
+import org.eclipse.che.ide.ext.java.client.command.valueproviders.SourcepathMacro;
+import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathMacro;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -37,26 +37,26 @@ public class JavaCommandType implements CommandType {
 
     private static final String ID = "java";
 
-    private final CurrentProjectPathProvider currentProjectPathProvider;
-    private final SourcepathProvider         sourcepathProvider;
-    private final OutputDirProvider          outputDirProvider;
-    private final ClasspathProvider          classpathProvider;
-    private final JavaLocalizationConstant   localizationConstants;
-    private final List<CommandPage>          pages;
+    private final CurrentProjectPathMacro  currentProjectPathMacro;
+    private final SourcepathMacro          sourcepathMacro;
+    private final OutputDirMacro           outputDirMacro;
+    private final ClasspathMacro           classpathMacro;
+    private final JavaLocalizationConstant localizationConstants;
+    private final List<CommandPage>        pages;
 
     @Inject
     public JavaCommandType(JavaResources resources,
                            JavaCommandPagePresenter page,
-                           CurrentProjectPathProvider currentProjectPathProvider,
-                           SourcepathProvider sourcepathProvider,
-                           OutputDirProvider outputDirProvider,
-                           ClasspathProvider classpathProvider,
+                           CurrentProjectPathMacro currentProjectPathMacro,
+                           SourcepathMacro sourcepathMacro,
+                           OutputDirMacro outputDirMacro,
+                           ClasspathMacro classpathMacro,
                            IconRegistry iconRegistry,
                            JavaLocalizationConstant localizationConstants) {
-        this.currentProjectPathProvider = currentProjectPathProvider;
-        this.sourcepathProvider = sourcepathProvider;
-        this.outputDirProvider = outputDirProvider;
-        this.classpathProvider = classpathProvider;
+        this.currentProjectPathMacro = currentProjectPathMacro;
+        this.sourcepathMacro = sourcepathMacro;
+        this.outputDirMacro = outputDirMacro;
+        this.classpathMacro = classpathMacro;
         this.localizationConstants = localizationConstants;
         pages = new LinkedList<>();
         pages.add(page);
@@ -86,12 +86,12 @@ public class JavaCommandType implements CommandType {
 
     @Override
     public String getCommandLineTemplate() {
-        return "cd " + currentProjectPathProvider.getName() +
-               " && javac -classpath " + classpathProvider.getName() +
-               " -sourcepath " + sourcepathProvider.getName() +
-               " -d " + outputDirProvider.getName() +
+        return "cd " + currentProjectPathMacro.getName() +
+               " && javac -classpath " + classpathMacro.getName() +
+               " -sourcepath " + sourcepathMacro.getName() +
+               " -d " + outputDirMacro.getName() +
                " src/Main.java" +
-               " && java -classpath " + classpathProvider.getName() + outputDirProvider.getName() +
+               " && java -classpath " + classpathMacro.getName() + outputDirMacro.getName() +
                " Main";
     }
 

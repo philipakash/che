@@ -53,7 +53,7 @@ import static org.mockito.Mockito.when;
  * @author Valeriy Svydenko
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ClasspathProviderTest {
+public class ClasspathMacroTest {
     @Mock
     private ClasspathContainer classpathContainer;
     @Mock
@@ -76,7 +76,7 @@ public class ClasspathProviderTest {
     private ArgumentCaptor<Function<List<ClasspathEntryDto>, String>> classpathEntriesCapture;
 
     @InjectMocks
-    private ClasspathProvider classpathProvider;
+    private ClasspathMacro classpathMacro;
 
     private Resource[] resources = new Resource[1];
 
@@ -111,7 +111,7 @@ public class ClasspathProviderTest {
         when(classpathContainer.getClasspathEntries(anyString())).thenReturn(classpathEntriesPromise);
         when(classpathResolver.getLibs()).thenReturn(libs);
 
-        classpathProvider.expand();
+        classpathMacro.expand();
 
         verify(classpathEntriesPromise).then(classpathEntriesCapture.capture());
         String classpath = classpathEntriesCapture.getValue().apply(entries);
@@ -148,7 +148,7 @@ public class ClasspathProviderTest {
         when(classpathResolver.getLibs()).thenReturn(libs);
         when(classpathResolver.getContainers()).thenReturn(containers);
 
-        classpathProvider.expand();
+        classpathMacro.expand();
 
         verify(classpathEntriesPromise).then(classpathEntriesCapture.capture());
         String classpath = classpathEntriesCapture.getValue().apply(entries);
@@ -167,7 +167,7 @@ public class ClasspathProviderTest {
         when(classpathContainer.getClasspathEntries(anyString())).thenReturn(classpathEntriesPromise);
         when(classpathResolver.getLibs()).thenReturn(libs);
 
-        classpathProvider.expand();
+        classpathMacro.expand();
 
         verify(classpathEntriesPromise).then(classpathEntriesCapture.capture());
         String classpath = classpathEntriesCapture.getValue().apply(entries);
@@ -188,6 +188,6 @@ public class ClasspathProviderTest {
 
     @Test
     public void keyOfTheClasspathShouldBeReturned() throws Exception {
-        assertEquals("${project.java.classpath}", classpathProvider.getName());
+        assertEquals("${project.java.classpath}", classpathMacro.getName());
     }
 }

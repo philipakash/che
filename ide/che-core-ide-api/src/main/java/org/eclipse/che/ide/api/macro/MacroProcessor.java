@@ -8,7 +8,7 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.api.command.macro;
+package org.eclipse.che.ide.api.macro;
 
 import org.eclipse.che.api.core.model.machine.Machine;
 import org.eclipse.che.api.promises.client.Promise;
@@ -16,7 +16,7 @@ import org.eclipse.che.ide.api.command.CommandImpl;
 import org.eclipse.che.ide.api.command.CommandManager;
 
 /**
- * Expands the {@link CommandMacro}s in a command line.
+ * Expands all {@link CommandMacro}s in the given string.
  *
  * @author Artem Zatsarynnyi
  * @see CommandMacro
@@ -25,8 +25,12 @@ import org.eclipse.che.ide.api.command.CommandManager;
 public interface MacroProcessor {
 
     /**
-     * Expands all macros in the given {@code commandLine}.
-     * <p>If {@link MacroProcessor} is unable to find a macro, the macro will not be expanded.
+     * Expands all known macros in the given string.
+     * If macro is unknown it will be skipped.
+     *
+     * @param text
+     *         string which may contain macros
+     * @return a promise that resolves to the given {@code text} with expanded macros
      */
-    Promise<String> expandMacros(String commandLine);
+    Promise<String> expandMacros(String text);
 }

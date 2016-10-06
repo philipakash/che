@@ -20,7 +20,7 @@ import com.google.inject.name.Names;
 import org.eclipse.che.api.machine.shared.Constants;
 import org.eclipse.che.ide.api.command.CommandManager;
 import org.eclipse.che.ide.api.command.CommandType;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.CommandMacro;
 import org.eclipse.che.ide.api.extension.ExtensionGinModule;
 import org.eclipse.che.ide.api.machine.MachineEntity;
 import org.eclipse.che.ide.api.machine.MachineManager;
@@ -32,9 +32,9 @@ import org.eclipse.che.ide.extension.machine.client.command.CommandManagerImpl;
 import org.eclipse.che.ide.extension.machine.client.command.custom.CustomCommandType;
 import org.eclipse.che.ide.extension.machine.client.command.edit.EditCommandsView;
 import org.eclipse.che.ide.extension.machine.client.command.edit.EditCommandsViewImpl;
-import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathProvider;
-import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectRelativePathProvider;
-import org.eclipse.che.ide.extension.machine.client.command.macros.DevMachineHostNameProvider;
+import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathMacro;
+import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectRelativePathMacro;
+import org.eclipse.che.ide.extension.machine.client.command.macros.DevMachineHostNameMacro;
 import org.eclipse.che.ide.extension.machine.client.command.producer.CommandProducerActionFactory;
 import org.eclipse.che.ide.extension.machine.client.inject.factories.EntityFactory;
 import org.eclipse.che.ide.extension.machine.client.inject.factories.TerminalFactory;
@@ -111,9 +111,9 @@ public class MachineGinModule extends AbstractGinModule {
 
         final GinMultibinder<CommandMacro> valueProviderBinder =
                 GinMultibinder.newSetBinder(binder(), CommandMacro.class);
-        valueProviderBinder.addBinding().to(DevMachineHostNameProvider.class);
-        valueProviderBinder.addBinding().to(CurrentProjectPathProvider.class);
-        valueProviderBinder.addBinding().to(CurrentProjectRelativePathProvider.class);
+        valueProviderBinder.addBinding().to(DevMachineHostNameMacro.class);
+        valueProviderBinder.addBinding().to(CurrentProjectPathMacro.class);
+        valueProviderBinder.addBinding().to(CurrentProjectRelativePathMacro.class);
 
         install(new GinFactoryModuleBuilder().implement(TabHeader.class, TabHeaderImpl.class)
                                              .implement(EditorButtonWidget.class, EditorButtonWidgetImpl.class)

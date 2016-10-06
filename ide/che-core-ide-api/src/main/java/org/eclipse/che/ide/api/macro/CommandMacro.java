@@ -8,7 +8,7 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.api.command.macro;
+package org.eclipse.che.ide.api.macro;
 
 import org.eclipse.che.api.core.model.machine.Machine;
 import org.eclipse.che.api.promises.client.Promise;
@@ -16,8 +16,8 @@ import org.eclipse.che.ide.api.command.CommandImpl;
 import org.eclipse.che.ide.api.command.CommandManager;
 
 /**
- * A macro which can be used in command line for simple text substitutions
- * before sending command to the machine for execution.
+ * Macro which can be used for the simple text substitutions.
+ * Mainly used in command lines before sending command to the machine for execution.
  *
  * @author Artem Zatsarynnyi
  * @see MacroProcessor#expandMacros(String)

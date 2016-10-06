@@ -8,12 +8,12 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.command.macro;
+package org.eclipse.che.ide.macro;
 
 import com.google.inject.Inject;
 
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
-import org.eclipse.che.ide.api.command.macro.CommandMacroRegistry;
+import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.util.loging.Log;
 
 import java.util.ArrayList;
@@ -23,15 +23,15 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Implementation for {@link CommandMacroRegistry}.
+ * Implementation for {@link MacroRegistry}.
  *
  * @author Artem Zatsarynnyi
  */
-public class CommandMacroRegistryImpl implements CommandMacroRegistry {
+public class MacroRegistryImpl implements MacroRegistry {
 
     private final Map<String, CommandMacro> macros;
 
-    public CommandMacroRegistryImpl() {
+    public MacroRegistryImpl() {
         this.macros = new HashMap<>();
     }
 
@@ -40,7 +40,7 @@ public class CommandMacroRegistryImpl implements CommandMacroRegistry {
         for (CommandMacro macro : macros) {
             final String name = macro.getName();
             if (this.macros.containsKey(name)) {
-                Log.warn(CommandMacroRegistryImpl.class, "Command macro '" + name + "' is already registered.");
+                Log.warn(MacroRegistryImpl.class, "Command macro '" + name + "' is already registered.");
             } else {
                 this.macros.put(name, macro);
             }

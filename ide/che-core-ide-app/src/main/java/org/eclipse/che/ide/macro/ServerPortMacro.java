@@ -8,7 +8,7 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.command.macro;
+package org.eclipse.che.ide.macro;
 
 import com.google.common.annotations.Beta;
 import com.google.common.collect.Sets;
@@ -18,19 +18,17 @@ import com.google.web.bindery.event.shared.EventBus;
 
 import org.eclipse.che.api.core.model.machine.Server;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
-import org.eclipse.che.ide.api.command.macro.CommandMacroRegistry;
+import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.api.machine.DevMachine;
 
 import java.util.Map;
 import java.util.Set;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
 /**
- * Provider which is responsible for the retrieving the address of the registered server.
+ * Provider which is responsible for the retrieving the port of the registered server.
  * <p>
- * Macro provided: <code>${server.[port]}</code>
+ * Macro provided: <code>${server.[port].port}</code>
  *
  * @author Vlad Zhukovskyi
  * @see AbstractServerMacro
@@ -40,14 +38,14 @@ import static com.google.common.base.Strings.isNullOrEmpty;
  */
 @Beta
 @Singleton
-public class ServerMacro extends AbstractServerMacro {
+public class ServerPortMacro extends AbstractServerMacro {
 
-    public static final String KEY = "${server.%}";
+    public static final String KEY = "${server.%.port}";
 
     @Inject
-    public ServerMacro(CommandMacroRegistry providerRegistry,
-                       EventBus eventBus,
-                       AppContext appContext) {
+    public ServerPortMacro(MacroRegistry providerRegistry,
+                           EventBus eventBus,
+                           AppContext appContext) {
         super(providerRegistry, eventBus, appContext);
     }
 
@@ -58,12 +56,15 @@ public class ServerMacro extends AbstractServerMacro {
 
         for (Map.Entry<String, ? extends Server> entry : devMachine.getDescriptor().getRuntime().getServers().entrySet()) {
 
-            final String prefix = isNullOrEmpty(entry.getValue().getProtocol()) ? "" : entry.getValue().getProtocol() + "://";
-            final String value = prefix + entry.getValue().getAddress() + (isNullOrEmpty(prefix) ? "" : "/");
+            if (!entry.getValue().getAddress().contains(":")) {
+                continue;
+            }
+
+            final String externalPort = entry.getValue().getAddress().split(":")[1];
 
             CommandMacro macro = new CustomCommandMacro(KEY.replace("%", entry.getKey()),
-                                                        value,
-                                                        "Returns protocol, hostname and port of an internal server");
+                                                        externalPort,
+                                                        "Returns port of a server registered by name");
 
             providers.add(macro);
 
@@ -72,8 +73,8 @@ public class ServerMacro extends AbstractServerMacro {
                 final String port = entry.getKey().substring(0, entry.getKey().length() - 4);
 
                 CommandMacro shortMacro = new CustomCommandMacro(KEY.replace("%", port),
-                                                                 value,
-                                                                 "Returns protocol, hostname and port of an internal server");
+                                                                 externalPort,
+                                                                 "Returns port of a server registered by name");
 
                 providers.add(shortMacro);
             }

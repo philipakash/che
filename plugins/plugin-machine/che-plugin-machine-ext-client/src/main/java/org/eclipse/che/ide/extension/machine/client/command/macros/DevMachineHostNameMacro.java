@@ -17,7 +17,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.js.Promises;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.CommandMacro;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateEvent;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateHandler;
 
@@ -29,7 +29,7 @@ import javax.validation.constraints.NotNull;
  * @author Artem Zatsarynnyi
  */
 @Singleton
-public class DevMachineHostNameProvider implements CommandMacro, WsAgentStateHandler {
+public class DevMachineHostNameMacro implements CommandMacro, WsAgentStateHandler {
 
     private static final String KEY = "${machine.dev.hostname}";
 
@@ -38,7 +38,7 @@ public class DevMachineHostNameProvider implements CommandMacro, WsAgentStateHan
     private String value;
 
     @Inject
-    public DevMachineHostNameProvider(EventBus eventBus, AppContext appContext) {
+    public DevMachineHostNameMacro(EventBus eventBus, AppContext appContext) {
         this.appContext = appContext;
         this.value = "";
         eventBus.addHandler(WsAgentStateEvent.TYPE, this);

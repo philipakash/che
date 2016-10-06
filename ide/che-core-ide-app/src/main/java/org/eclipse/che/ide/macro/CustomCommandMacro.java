@@ -8,14 +8,14 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.command.macro;
+package org.eclipse.che.ide.macro;
 
 import com.google.common.annotations.Beta;
 import com.google.common.base.Objects;
 
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.js.Promises;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.CommandMacro;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

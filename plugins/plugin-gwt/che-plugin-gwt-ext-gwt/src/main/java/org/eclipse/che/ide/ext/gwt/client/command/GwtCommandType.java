@@ -18,8 +18,8 @@ import org.eclipse.che.ide.api.command.CommandType;
 import org.eclipse.che.ide.api.icon.Icon;
 import org.eclipse.che.ide.api.icon.IconRegistry;
 import org.eclipse.che.ide.ext.gwt.client.GwtResources;
-import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathProvider;
-import org.eclipse.che.ide.extension.machine.client.command.macros.DevMachineHostNameProvider;
+import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathMacro;
+import org.eclipse.che.ide.extension.machine.client.command.macros.DevMachineHostNameMacro;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,19 +36,19 @@ public class GwtCommandType implements CommandType {
 
     private static final String ID = "gwt";
 
-    private final CurrentProjectPathProvider currentProjectPathProvider;
-    private final DevMachineHostNameProvider devMachineHostNameProvider;
+    private final CurrentProjectPathMacro currentProjectPathMacro;
+    private final DevMachineHostNameMacro devMachineHostNameMacro;
 
     private final List<CommandPage> pages;
 
     @Inject
     public GwtCommandType(GwtResources resources,
                           GwtCommandPagePresenter page,
-                          CurrentProjectPathProvider currentProjectPathProvider,
-                          DevMachineHostNameProvider devMachineHostNameProvider,
+                          CurrentProjectPathMacro currentProjectPathMacro,
+                          DevMachineHostNameMacro devMachineHostNameMacro,
                           IconRegistry iconRegistry) {
-        this.currentProjectPathProvider = currentProjectPathProvider;
-        this.devMachineHostNameProvider = devMachineHostNameProvider;
+        this.currentProjectPathMacro = currentProjectPathMacro;
+        this.devMachineHostNameMacro = devMachineHostNameMacro;
         pages = new LinkedList<>();
         pages.add(page);
 
@@ -77,8 +77,8 @@ public class GwtCommandType implements CommandType {
 
     @Override
     public String getCommandLineTemplate() {
-        return COMMAND_TEMPLATE + " -f " + currentProjectPathProvider.getName() + " -Dgwt.bindAddress=" +
-               devMachineHostNameProvider.getName();
+        return COMMAND_TEMPLATE + " -f " + currentProjectPathMacro.getName() + " -Dgwt.bindAddress=" +
+               devMachineHostNameMacro.getName();
     }
 
     @Override

@@ -12,7 +12,7 @@ package org.eclipse.che.ide.editor.macro;
 
 import com.google.common.annotations.Beta;
 
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.CommandMacro;
 import org.eclipse.che.ide.api.editor.EditorAgent;
 import org.eclipse.che.ide.api.editor.EditorPartPresenter;
 

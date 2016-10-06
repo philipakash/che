@@ -8,14 +8,14 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.command.macro;
+package org.eclipse.che.ide.macro;
 
 import com.google.common.annotations.Beta;
 import com.google.web.bindery.event.shared.EventBus;
 
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
-import org.eclipse.che.ide.api.command.macro.CommandMacroRegistry;
+import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.api.machine.DevMachine;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateEvent;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateHandler;
@@ -29,7 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * to allow fetch necessary information to use in custom commands, preview urls, etc.
  *
  * @author Vlad Zhukovskyi
- * @see CommandMacroRegistry
+ * @see MacroRegistry
  * @see CommandMacro
  * @see ServerHostNameMacro
  * @see ServerMacro
@@ -40,10 +40,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Beta
 public abstract class AbstractServerMacro implements WsAgentStateHandler {
 
-    private final CommandMacroRegistry providerRegistry;
-    private final AppContext           appContext;
+    private final MacroRegistry providerRegistry;
+    private final AppContext    appContext;
 
-    public AbstractServerMacro(CommandMacroRegistry providerRegistry,
+    public AbstractServerMacro(MacroRegistry providerRegistry,
                                EventBus eventBus,
                                AppContext appContext) {
         this.providerRegistry = providerRegistry;

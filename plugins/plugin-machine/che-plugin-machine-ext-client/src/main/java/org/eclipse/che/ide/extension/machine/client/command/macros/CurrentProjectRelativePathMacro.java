@@ -16,7 +16,7 @@ import com.google.inject.Singleton;
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.PromiseProvider;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.CommandMacro;
 import org.eclipse.che.ide.api.resources.Resource;
 
 /**
@@ -28,7 +28,7 @@ import org.eclipse.che.ide.api.resources.Resource;
  * @author Vlad Zhukovskiy
  */
 @Singleton
-public class CurrentProjectRelativePathProvider implements CommandMacro {
+public class CurrentProjectRelativePathMacro implements CommandMacro {
 
     private static final String KEY = "${current.project.relpath}";
 
@@ -36,7 +36,7 @@ public class CurrentProjectRelativePathProvider implements CommandMacro {
     private final PromiseProvider promises;
 
     @Inject
-    public CurrentProjectRelativePathProvider(AppContext appContext, PromiseProvider promises) {
+    public CurrentProjectRelativePathMacro(AppContext appContext, PromiseProvider promises) {
         this.appContext = appContext;
         this.promises = promises;
     }

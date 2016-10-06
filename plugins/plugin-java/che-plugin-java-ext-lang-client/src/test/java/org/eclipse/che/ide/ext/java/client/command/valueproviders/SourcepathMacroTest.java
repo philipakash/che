@@ -50,7 +50,7 @@ import static org.mockito.Mockito.when;
  * @author Valeriy Svydenko
  */
 @RunWith(MockitoJUnitRunner.class)
-public class SourcepathProviderTest {
+public class SourcepathMacroTest {
     @Mock
     private ClasspathContainer classpathContainer;
     @Mock
@@ -73,7 +73,7 @@ public class SourcepathProviderTest {
     private ArgumentCaptor<Function<List<ClasspathEntryDto>, String>> classpathEntriesCapture;
 
     @InjectMocks
-    private SourcepathProvider sourcepathProvider;
+    private SourcepathMacro sourcepathMacro;
 
     private Resource[] resources = new Resource[1];
 
@@ -108,7 +108,7 @@ public class SourcepathProviderTest {
         when(classpathContainer.getClasspathEntries(anyString())).thenReturn(classpathEntriesPromise);
         when(classpathResolver.getSources()).thenReturn(sources);
 
-        sourcepathProvider.expand();
+        sourcepathMacro.expand();
 
         verify(classpathEntriesPromise).then(classpathEntriesCapture.capture());
         String classpath = classpathEntriesCapture.getValue().apply(entries);
@@ -127,7 +127,7 @@ public class SourcepathProviderTest {
         when(classpathContainer.getClasspathEntries(anyString())).thenReturn(classpathEntriesPromise);
         when(classpathResolver.getLibs()).thenReturn(libs);
 
-        sourcepathProvider.expand();
+        sourcepathMacro.expand();
 
         verify(classpathEntriesPromise).then(classpathEntriesCapture.capture());
         String classpath = classpathEntriesCapture.getValue().apply(entries);
@@ -148,7 +148,7 @@ public class SourcepathProviderTest {
 
     @Test
     public void keyOfTheSourcepathShouldBeReturned() throws Exception {
-        assertEquals("${project.java.sourcepath}", sourcepathProvider.getName());
+        assertEquals("${project.java.sourcepath}", sourcepathMacro.getName());
     }
 
 }

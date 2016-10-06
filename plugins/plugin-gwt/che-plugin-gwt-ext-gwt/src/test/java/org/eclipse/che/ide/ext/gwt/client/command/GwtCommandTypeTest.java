@@ -13,8 +13,8 @@ package org.eclipse.che.ide.ext.gwt.client.command;
 import org.eclipse.che.ide.api.command.CommandPage;
 import org.eclipse.che.ide.api.icon.IconRegistry;
 import org.eclipse.che.ide.ext.gwt.client.GwtResources;
-import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathProvider;
-import org.eclipse.che.ide.extension.machine.client.command.macros.DevMachineHostNameProvider;
+import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathMacro;
+import org.eclipse.che.ide.extension.machine.client.command.macros.DevMachineHostNameMacro;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -31,15 +31,15 @@ import static org.mockito.Mockito.verify;
 public class GwtCommandTypeTest {
 
     @Mock
-    private GwtResources               gwtResources;
+    private GwtResources            gwtResources;
     @Mock
-    private GwtCommandPagePresenter    gwtCommandPagePresenter;
+    private GwtCommandPagePresenter gwtCommandPagePresenter;
     @Mock
-    private CurrentProjectPathProvider currentProjectPathProvider;
+    private CurrentProjectPathMacro currentProjectPathMacro;
     @Mock
-    private DevMachineHostNameProvider devMachineHostNameProvider;
+    private DevMachineHostNameMacro devMachineHostNameMacro;
     @Mock
-    private IconRegistry               iconRegistry;
+    private IconRegistry            iconRegistry;
 
     @InjectMocks
     private GwtCommandType gwtCommandType;
@@ -55,7 +55,7 @@ public class GwtCommandTypeTest {
     public void shouldReturnCommandTemplate() throws Exception {
         gwtCommandType.getCommandLineTemplate();
 
-        verify(currentProjectPathProvider).getName();
-        verify(devMachineHostNameProvider).getName();
+        verify(currentProjectPathMacro).getName();
+        verify(devMachineHostNameMacro).getName();
     }
 }

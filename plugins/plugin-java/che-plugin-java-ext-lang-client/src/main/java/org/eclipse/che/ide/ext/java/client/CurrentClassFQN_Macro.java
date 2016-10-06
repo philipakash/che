@@ -17,7 +17,7 @@ import com.google.inject.Singleton;
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.js.Promises;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.CommandMacro;
 import org.eclipse.che.ide.api.resources.Container;
 import org.eclipse.che.ide.api.resources.Resource;
 import org.eclipse.che.ide.ext.java.client.resource.SourceFolderMarker;
@@ -32,13 +32,13 @@ import static org.eclipse.che.ide.ext.java.client.util.JavaUtil.isJavaFile;
  * @author Artem Zatsarynnyi
  */
 @Singleton
-public class CurrentClassFQNProvider implements CommandMacro {
+public class CurrentClassFQN_Macro implements CommandMacro {
 
     private static final String KEY = "${current.class.fqn}";
     private final AppContext appContext;
 
     @Inject
-    public CurrentClassFQNProvider(AppContext appContext) {
+    public CurrentClassFQN_Macro(AppContext appContext) {
         this.appContext = appContext;
     }
 

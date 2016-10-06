@@ -17,8 +17,8 @@ import org.eclipse.che.ide.api.command.CommandPage;
 import org.eclipse.che.ide.api.command.CommandType;
 import org.eclipse.che.ide.api.icon.Icon;
 import org.eclipse.che.ide.api.icon.IconRegistry;
-import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathProvider;
-import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectRelativePathProvider;
+import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathMacro;
+import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectRelativePathMacro;
 import org.eclipse.che.ide.extension.machine.client.command.macros.ServerPortProvider;
 import org.eclipse.che.plugin.maven.client.MavenResources;
 
@@ -37,21 +37,18 @@ public class MavenCommandType implements CommandType {
     private static final String COMMAND_TEMPLATE = "mvn clean install";
     private static final String DEF_PORT         = "8080";
 
-    private final MavenTestCommandProducer           mavenTestCommandProducer;
-    private final CurrentProjectPathProvider         currentProjectPathProvider;
-    private final CurrentProjectRelativePathProvider currentProjectRelativePathProvider;
-    private final List<CommandPage>                  pages;
+    private final CurrentProjectPathMacro         currentProjectPathMacro;
+    private final CurrentProjectRelativePathMacro currentProjectRelativePathMacro;
+    private final List<CommandPage>               pages;
 
     @Inject
     public MavenCommandType(MavenResources resources,
                             MavenCommandPagePresenter page,
-                            MavenTestCommandProducer mavenTestCommandProducer,
-                            CurrentProjectPathProvider currentProjectPathProvider,
-                            CurrentProjectRelativePathProvider currentProjectRelativePathProvider,
+                            CurrentProjectPathMacro currentProjectPathMacro,
+                            CurrentProjectRelativePathMacro currentProjectRelativePathMacro,
                             IconRegistry iconRegistry) {
-        this.mavenTestCommandProducer = mavenTestCommandProducer;
-        this.currentProjectPathProvider = currentProjectPathProvider;
-        this.currentProjectRelativePathProvider = currentProjectRelativePathProvider;
+        this.currentProjectPathMacro = currentProjectPathMacro;
+        this.currentProjectRelativePathMacro = currentProjectRelativePathMacro;
 
         pages = new LinkedList<>();
         pages.add(page);
@@ -81,13 +78,13 @@ public class MavenCommandType implements CommandType {
 
     @Override
     public String getCommandLineTemplate() {
-        return COMMAND_TEMPLATE + " -f " + currentProjectPathProvider.getName();
+        return COMMAND_TEMPLATE + " -f " + currentProjectPathMacro.getName();
     }
 
     @Override
     public String getPreviewUrlTemplate() {
         //TODO: hardcode http after switching WS Master to https
         return "http://" + ServerPortProvider.KEY_TEMPLATE.replace("%", DEF_PORT) + "/" +
-               currentProjectRelativePathProvider.getName();
+               currentProjectRelativePathMacro.getName();
     }
 }

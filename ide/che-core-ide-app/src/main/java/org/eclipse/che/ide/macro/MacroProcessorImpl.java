@@ -8,7 +8,7 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.command.macro;
+package org.eclipse.che.ide.macro;
 
 import com.google.inject.Inject;
 
@@ -19,9 +19,9 @@ import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.js.Promises;
 import org.eclipse.che.ide.api.command.CommandImpl;
 import org.eclipse.che.ide.api.command.CommandManager;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
-import org.eclipse.che.ide.api.command.macro.CommandMacroRegistry;
-import org.eclipse.che.ide.api.command.macro.MacroProcessor;
+import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.MacroRegistry;
+import org.eclipse.che.ide.api.macro.MacroProcessor;
 
 import java.util.Iterator;
 
@@ -34,62 +34,41 @@ import java.util.Iterator;
  */
 public class MacroProcessorImpl implements MacroProcessor {
 
-    private final CommandMacroRegistry macroRegistry;
+    private final MacroRegistry macroRegistry;
 
     @Inject
-    public MacroProcessorImpl(CommandMacroRegistry macroRegistry) {
+    public MacroProcessorImpl(MacroRegistry macroRegistry) {
         this.macroRegistry = macroRegistry;
     }
 
     @Override
-    public Promise<String> expandMacros(String commandLine) {
+    public Promise<String> expandMacros(String text) {
         Promise<String> promise = Promises.resolve(null);
-        CommandLineContainer commandLineContainer = new CommandLineContainer(commandLine);
-        return expandMacros(promise, commandLineContainer, macroRegistry.getMacros().iterator());
+        return expandMacros(promise, text, macroRegistry.getMacros().iterator());
     }
 
-    private Promise<String> expandMacros(Promise<String> promise,
-                                         CommandLineContainer commandLineContainer,
-                                         Iterator<CommandMacro> iterator) {
+    private Promise<String> expandMacros(Promise<String> promise, String text, Iterator<CommandMacro> iterator) {
         if (!iterator.hasNext()) {
             return promise;
         }
 
-        final CommandMacro provider = iterator.next();
+        CommandMacro macro = iterator.next();
+        Promise<String> derivedPromise = promise.thenPromise(expandMacro(text, macro));
 
-        Promise<String> derivedPromise = promise.thenPromise(expandMacros(commandLineContainer, provider));
-
-        return expandMacros(derivedPromise, commandLineContainer, iterator);
+        return expandMacros(derivedPromise, text, iterator);
     }
 
-    private Function<String, Promise<String>> expandMacros(final CommandLineContainer commandLineContainer, final CommandMacro macro) {
+    private Function<String, Promise<String>> expandMacro(final String text, final CommandMacro macro) {
         return new Function<String, Promise<String>>() {
             @Override
             public Promise<String> apply(String arg) throws FunctionException {
                 return macro.expand().thenPromise(new Function<String, Promise<String>>() {
                     @Override
                     public Promise<String> apply(String arg) throws FunctionException {
-                        commandLineContainer.setCommandLine(commandLineContainer.getCommandLine().replace(macro.getName(), arg));
-                        return Promises.resolve(commandLineContainer.getCommandLine());
+                        return Promises.resolve(text.replace(macro.getName(), arg));
                     }
                 });
             }
         };
-    }
-
-    private class CommandLineContainer {
-        String commandLine;
-
-        CommandLineContainer(String commandLine) {
-            this.commandLine = commandLine;
-        }
-
-        String getCommandLine() {
-            return commandLine;
-        }
-
-        void setCommandLine(String commandLine) {
-            this.commandLine = commandLine;
-        }
     }
 }
