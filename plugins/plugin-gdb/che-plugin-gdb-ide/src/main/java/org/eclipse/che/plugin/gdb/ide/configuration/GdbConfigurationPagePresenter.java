@@ -28,7 +28,6 @@ import org.eclipse.che.ide.api.debug.DebugConfiguration;
 import org.eclipse.che.ide.api.debug.DebugConfigurationPage;
 import org.eclipse.che.ide.api.machine.RecipeServiceClient;
 import org.eclipse.che.ide.dto.DtoFactory;
-import org.eclipse.che.ide.extension.machine.client.command.valueproviders.CurrentProjectPathProvider;
 import org.eclipse.che.ide.extension.machine.client.inject.factories.EntityFactory;
 import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathProvider;
 import org.eclipse.che.ide.json.JsonHelper;
