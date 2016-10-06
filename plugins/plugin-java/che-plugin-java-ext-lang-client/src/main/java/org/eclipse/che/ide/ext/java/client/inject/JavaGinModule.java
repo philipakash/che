@@ -18,7 +18,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.data.tree.NodeInterceptor;
 import org.eclipse.che.ide.api.extension.ExtensionGinModule;
 import org.eclipse.che.ide.api.filetypes.FileType;
@@ -117,11 +117,11 @@ public class JavaGinModule extends AbstractGinModule {
         bind(PreferencesManager.class).annotatedWith(JavaCompilerPreferenceManager.class).to(ErrorsWarningsPreferenceManager.class);
         GinMultibinder.newSetBinder(binder(), PreferencesManager.class).addBinding().to(ErrorsWarningsPreferenceManager.class);
 
-        GinMultibinder.newSetBinder(binder(), CommandMacro.class).addBinding().to(ClasspathMacro.class);
-        GinMultibinder.newSetBinder(binder(), CommandMacro.class).addBinding().to(OutputDirMacro.class);
-        GinMultibinder.newSetBinder(binder(), CommandMacro.class).addBinding().to(MainClassMacro.class);
-        GinMultibinder.newSetBinder(binder(), CommandMacro.class).addBinding().to(SourcepathMacro.class);
-        GinMultibinder.newSetBinder(binder(), CommandMacro.class).addBinding().to(CurrentClassFQN_Macro.class);
+        GinMultibinder.newSetBinder(binder(), Macro.class).addBinding().to(ClasspathMacro.class);
+        GinMultibinder.newSetBinder(binder(), Macro.class).addBinding().to(OutputDirMacro.class);
+        GinMultibinder.newSetBinder(binder(), Macro.class).addBinding().to(MainClassMacro.class);
+        GinMultibinder.newSetBinder(binder(), Macro.class).addBinding().to(SourcepathMacro.class);
+        GinMultibinder.newSetBinder(binder(), Macro.class).addBinding().to(CurrentClassFQN_Macro.class);
         GinMultibinder.newSetBinder(binder(), ClasspathPagePresenter.class).addBinding().to(LibEntryPresenter.class);
         GinMultibinder.newSetBinder(binder(), ClasspathPagePresenter.class).addBinding().to(SourceEntryPresenter.class);
         GinMultibinder.newSetBinder(binder(), RenamingSupport.class).addBinding().to(JavaSourceRenameValidator.class);

@@ -258,17 +258,6 @@ public class MachineExtension {
         consolesTreeContextMenu.add(stopProcessAction);
         consolesTreeContextMenu.add(closeConsoleAction);
 
-        // populate context commands
-//        DefaultActionGroup commandActionsGroup = new DefaultActionGroup(actionManager);
-//        commandActionsGroup.addSeparator();
-//        for (CommandProducer commandProducer : commandProducers) {
-//            commandActionsGroup.add(commandProducerActionFactory.create(commandProducer));
-//        }
-//        DefaultActionGroup mainContextMenu = (DefaultActionGroup)actionManager.getAction(GROUP_MAIN_CONTEXT_MENU);
-//        DefaultActionGroup editorTabContextMenu = (DefaultActionGroup)actionManager.getAction(GROUP_EDITOR_TAB_CONTEXT_MENU);
-//        mainContextMenu.add(commandActionsGroup);
-//        editorTabContextMenu.add(commandActionsGroup);
-
 
         // Define hot-keys
         keyBinding.getGlobal().addKey(new KeyBuilder().alt().charCode(KeyCodeMap.F12).build(), "newTerminal");

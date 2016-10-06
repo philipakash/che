@@ -30,7 +30,7 @@ import org.eclipse.che.ide.api.app.AppContext;
 import org.eclipse.che.ide.api.auth.OAuthServiceClient;
 import org.eclipse.che.ide.api.auth.OAuthServiceClientImpl;
 import org.eclipse.che.ide.api.command.CommandTypeRegistry;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.api.macro.MacroProcessor;
 import org.eclipse.che.ide.api.component.Component;
@@ -498,7 +498,7 @@ public class CoreGinModule extends AbstractGinModule {
 
         bind(MacroProcessor.class).to(MacroProcessorImpl.class).in(Singleton.class);
 
-        GinMultibinder<CommandMacro> macrosBinder = GinMultibinder.newSetBinder(binder(), CommandMacro.class);
+        GinMultibinder<Macro> macrosBinder = GinMultibinder.newSetBinder(binder(), Macro.class);
         macrosBinder.addBinding().to(EditorCurrentFileNameMacro.class);
         macrosBinder.addBinding().to(EditorCurrentFilePathMacro.class);
         macrosBinder.addBinding().to(EditorCurrentFileRelativePathMacro.class);

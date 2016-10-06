@@ -17,7 +17,7 @@ import com.google.inject.Singleton;
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.PromiseProvider;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 
 /**
  * Provider which is responsible for retrieving the workspace name.
@@ -25,12 +25,12 @@ import org.eclipse.che.ide.api.macro.CommandMacro;
  * Macro provided: <code>${workspace.name}</code>
  *
  * @author Vlad Zhukovskyi
- * @see CommandMacro
+ * @see Macro
  * @since 4.7.0
  */
 @Beta
 @Singleton
-public class WorkspaceNameMacro implements CommandMacro {
+public class WorkspaceNameMacro implements Macro {
 
     public static final String KEY = "${workspace.name}";
 

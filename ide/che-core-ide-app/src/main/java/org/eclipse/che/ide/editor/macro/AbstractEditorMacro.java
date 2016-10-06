@@ -12,7 +12,7 @@ package org.eclipse.che.ide.editor.macro;
 
 import com.google.common.annotations.Beta;
 
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.editor.EditorAgent;
 import org.eclipse.che.ide.api.editor.EditorPartPresenter;
 
@@ -22,7 +22,7 @@ import org.eclipse.che.ide.api.editor.EditorPartPresenter;
  *
  * @author Vlad Zhukovskyi
  * @see EditorAgent
- * @see CommandMacro
+ * @see Macro
  * @see EditorCurrentFileNameMacro
  * @see EditorCurrentFilePathMacro
  * @see EditorCurrentFileRelativePathMacro
@@ -31,7 +31,7 @@ import org.eclipse.che.ide.api.editor.EditorPartPresenter;
  * @since 4.7.0
  */
 @Beta
-public abstract class AbstractEditorMacro implements CommandMacro {
+public abstract class AbstractEditorMacro implements Macro {
 
     private EditorAgent editorAgent;
 

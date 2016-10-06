@@ -14,7 +14,7 @@ import com.google.common.annotations.Beta;
 import com.google.web.bindery.event.shared.EventBus;
 
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.api.machine.DevMachine;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateEvent;
@@ -30,7 +30,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Vlad Zhukovskyi
  * @see MacroRegistry
- * @see CommandMacro
+ * @see Macro
  * @see ServerHostNameMacro
  * @see ServerMacro
  * @see ServerPortMacro
@@ -65,7 +65,7 @@ public abstract class AbstractServerMacro implements WsAgentStateHandler {
             return;
         }
 
-        final Set<CommandMacro> providers = getMacros(devMachine);
+        final Set<Macro> providers = getMacros(devMachine);
         checkNotNull(providers);
 
         if (providers.isEmpty()) {
@@ -88,7 +88,7 @@ public abstract class AbstractServerMacro implements WsAgentStateHandler {
             return;
         }
 
-        for (CommandMacro provider : getMacros(devMachine)) {
+        for (Macro provider : getMacros(devMachine)) {
             providerRegistry.unregister(provider);
         }
     }
@@ -100,10 +100,10 @@ public abstract class AbstractServerMacro implements WsAgentStateHandler {
      *         current developer machine
      * @return set of unique macro providers
      * @see DevMachine
-     * @see CommandMacro
+     * @see Macro
      * @since 4.7.0
      */
-    public abstract Set<CommandMacro> getMacros(DevMachine devMachine);
+    public abstract Set<Macro> getMacros(DevMachine devMachine);
 
     /** {@inheritDoc} */
     @Override

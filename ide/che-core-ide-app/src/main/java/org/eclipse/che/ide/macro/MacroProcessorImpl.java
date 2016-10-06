@@ -19,7 +19,7 @@ import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.js.Promises;
 import org.eclipse.che.ide.api.command.CommandImpl;
 import org.eclipse.che.ide.api.command.CommandManager;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.api.macro.MacroProcessor;
 
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * Implementation of {@link MacroProcessor}.
  *
  * @author Artem Zatsarynnyi
- * @see CommandMacro
+ * @see Macro
  * @see CommandManager#executeCommand(CommandImpl, Machine)
  */
 public class MacroProcessorImpl implements MacroProcessor {
@@ -47,18 +47,18 @@ public class MacroProcessorImpl implements MacroProcessor {
         return expandMacros(promise, text, macroRegistry.getMacros().iterator());
     }
 
-    private Promise<String> expandMacros(Promise<String> promise, String text, Iterator<CommandMacro> iterator) {
+    private Promise<String> expandMacros(Promise<String> promise, String text, Iterator<Macro> iterator) {
         if (!iterator.hasNext()) {
             return promise;
         }
 
-        CommandMacro macro = iterator.next();
+        Macro macro = iterator.next();
         Promise<String> derivedPromise = promise.thenPromise(expandMacro(text, macro));
 
         return expandMacros(derivedPromise, text, iterator);
     }
 
-    private Function<String, Promise<String>> expandMacro(final String text, final CommandMacro macro) {
+    private Function<String, Promise<String>> expandMacro(final String text, final Macro macro) {
         return new Function<String, Promise<String>>() {
             @Override
             public Promise<String> apply(String arg) throws FunctionException {

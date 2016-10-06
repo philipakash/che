@@ -15,7 +15,7 @@ import com.google.inject.Singleton;
 
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.js.Promises;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.ext.java.client.command.JavaCommandModel;
 import org.eclipse.che.ide.ext.java.client.command.JavaCommandPagePresenter;
 
@@ -25,7 +25,7 @@ import org.eclipse.che.ide.ext.java.client.command.JavaCommandPagePresenter;
  * @author Valeriy Svydenko
  */
 @Singleton
-public class MainClassMacro implements CommandMacro {
+public class MainClassMacro implements Macro {
 
     private static final String KEY = "${java.main.class}";
 

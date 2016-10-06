@@ -19,7 +19,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 import org.eclipse.che.api.core.model.machine.Server;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.api.machine.DevMachine;
 
@@ -52,8 +52,8 @@ public class ServerProtocolMacro extends AbstractServerMacro {
 
     /** {@inheritDoc} */
     @Override
-    public Set<CommandMacro> getMacros(DevMachine devMachine) {
-        final Set<CommandMacro> providers = Sets.newHashSet();
+    public Set<Macro> getMacros(DevMachine devMachine) {
+        final Set<Macro> providers = Sets.newHashSet();
 
         for (Map.Entry<String, ? extends Server> entry : devMachine.getDescriptor().getRuntime().getServers().entrySet()) {
 
@@ -61,9 +61,9 @@ public class ServerProtocolMacro extends AbstractServerMacro {
                 continue;
             }
 
-            CommandMacro macro = new CustomCommandMacro(KEY.replace("%", entry.getKey()),
-                                                        entry.getValue().getProtocol(),
-                                                        "Returns protocol of a server registered by name");
+            Macro macro = new CustomMacro(KEY.replace("%", entry.getKey()),
+                                          entry.getValue().getProtocol(),
+                                          "Returns protocol of a server registered by name");
 
             providers.add(macro);
 
@@ -71,9 +71,9 @@ public class ServerProtocolMacro extends AbstractServerMacro {
             if (entry.getKey().endsWith("/tcp")) {
                 final String port = entry.getKey().substring(0, entry.getKey().length() - 4);
 
-                CommandMacro shortMacro = new CustomCommandMacro(KEY.replace("%", port),
-                                                                 entry.getValue().getProtocol(),
-                                                                 "Returns protocol of a server registered by name");
+                Macro shortMacro = new CustomMacro(KEY.replace("%", port),
+                                                   entry.getValue().getProtocol(),
+                                                   "Returns protocol of a server registered by name");
 
                 providers.add(shortMacro);
             }

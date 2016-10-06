@@ -14,7 +14,7 @@ import com.google.gwtmockito.GwtMockitoTestRunner;
 
 import org.eclipse.che.api.promises.client.Operation;
 import org.eclipse.che.api.promises.client.OperationException;
-import org.eclipse.che.ide.macro.CustomCommandMacro;
+import org.eclipse.che.ide.macro.CustomMacro;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,22 +22,22 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.assertSame;
 
 /**
- * Unit tests for the {@link CustomCommandMacro}
+ * Unit tests for the {@link CustomMacro}
  *
  * @author Vlad Zhukovskyi
  */
 @RunWith(GwtMockitoTestRunner.class)
-public class CustomCommandMacroTest {
+public class CustomMacroTest {
 
     public static final String KEY   = "key";
     public static final String VALUE = "value";
     public static final String DESCRIPTION = "description";
 
-    private CustomCommandMacro provider;
+    private CustomMacro provider;
 
     @Before
     public void init() throws Exception {
-        provider = new CustomCommandMacro(KEY, VALUE, DESCRIPTION);
+        provider = new CustomMacro(KEY, VALUE, DESCRIPTION);
     }
 
     @Test

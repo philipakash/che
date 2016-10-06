@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Used for registering new command type and providing all the necessary
  * information and components for working with the appropriate command.
- * <p>Implementations of this interface need to be registered using
+ * <p>Implementations of this interface have to be registered using
  * a multibinder in order to be picked-up on application's start-up.
  *
  * @author Artem Zatsarynnyi

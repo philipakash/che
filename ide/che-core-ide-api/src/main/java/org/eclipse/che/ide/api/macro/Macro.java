@@ -10,20 +10,22 @@
  *******************************************************************************/
 package org.eclipse.che.ide.api.macro;
 
-import org.eclipse.che.api.core.model.machine.Machine;
 import org.eclipse.che.api.promises.client.Promise;
-import org.eclipse.che.ide.api.command.CommandImpl;
-import org.eclipse.che.ide.api.command.CommandManager;
+
+import java.util.Set;
 
 /**
  * Macro which can be used for the simple text substitutions.
  * Mainly used in command lines before sending command to the machine for execution.
+ * <p>Implementations of this interface have to be registered using
+ * a multibinder in order to be picked-up on application's start-up.
+ * Also macro can be registered in 'runtime' with {@link MacroRegistry#register(Set)}.
  *
  * @author Artem Zatsarynnyi
  * @see MacroProcessor#expandMacros(String)
- * @see CommandManager#executeCommand(CommandImpl, Machine)
+ * @see MacroRegistry
  */
-public interface CommandMacro {
+public interface Macro {
 
     /** Returns macro name. The recommended syntax is ${macro.name}. */
     String getName();

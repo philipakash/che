@@ -14,25 +14,25 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Registry for {@link CommandMacro}s.
+ * Registry for {@link Macro}s.
  *
  * @author Artem Zatsarynnyi
- * @see CommandMacro
+ * @see Macro
  */
 public interface MacroRegistry {
 
     /** Register set of macros. */
-    void register(Set<CommandMacro> macros);
+    void register(Set<Macro> macros);
 
     /** Unregister the given macro. */
-    void unregister(CommandMacro macro);
+    void unregister(Macro macro);
 
-    /** Returns the names of all registered {@link CommandMacro}s. */
+    /** Returns the names of all registered {@link Macro}s. */
     Set<String> getNames();
 
-    /** Returns {@link CommandMacro} by it's name. */
-    CommandMacro getMacro(String name);
+    /** Returns {@link Macro} by it's name. */
+    Macro getMacro(String name);
 
-    /** Returns all registered {@link CommandMacro}s. */
-    List<CommandMacro> getMacros();
+    /** Returns all registered {@link Macro}s. */
+    List<Macro> getMacros();
 }

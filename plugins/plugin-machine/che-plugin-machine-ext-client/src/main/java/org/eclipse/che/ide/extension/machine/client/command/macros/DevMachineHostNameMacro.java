@@ -17,7 +17,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.js.Promises;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateEvent;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateHandler;
 
@@ -29,7 +29,7 @@ import javax.validation.constraints.NotNull;
  * @author Artem Zatsarynnyi
  */
 @Singleton
-public class DevMachineHostNameMacro implements CommandMacro, WsAgentStateHandler {
+public class DevMachineHostNameMacro implements Macro, WsAgentStateHandler {
 
     private static final String KEY = "${machine.dev.hostname}";
 

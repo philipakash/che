@@ -12,7 +12,7 @@ package org.eclipse.che.ide.macro;
 
 import com.google.inject.Inject;
 
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.util.loging.Log;
 
@@ -29,15 +29,15 @@ import java.util.Set;
  */
 public class MacroRegistryImpl implements MacroRegistry {
 
-    private final Map<String, CommandMacro> macros;
+    private final Map<String, Macro> macros;
 
     public MacroRegistryImpl() {
         this.macros = new HashMap<>();
     }
 
     @Inject(optional = true)
-    public void register(Set<CommandMacro> macros) {
-        for (CommandMacro macro : macros) {
+    public void register(Set<Macro> macros) {
+        for (Macro macro : macros) {
             final String name = macro.getName();
             if (this.macros.containsKey(name)) {
                 Log.warn(MacroRegistryImpl.class, "Command macro '" + name + "' is already registered.");
@@ -48,17 +48,17 @@ public class MacroRegistryImpl implements MacroRegistry {
     }
 
     @Override
-    public void unregister(CommandMacro macro) {
+    public void unregister(Macro macro) {
         macros.remove(macro.getName());
     }
 
     @Override
-    public CommandMacro getMacro(String name) {
+    public Macro getMacro(String name) {
         return macros.get(name);
     }
 
     @Override
-    public List<CommandMacro> getMacros() {
+    public List<Macro> getMacros() {
         return new ArrayList<>(macros.values());
     }
 

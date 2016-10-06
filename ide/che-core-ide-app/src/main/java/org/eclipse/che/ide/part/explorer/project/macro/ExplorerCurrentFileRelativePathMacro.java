@@ -20,7 +20,7 @@ import com.google.inject.Singleton;
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.PromiseProvider;
 import org.eclipse.che.ide.api.data.tree.Node;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.resources.Resource;
 import org.eclipse.che.ide.part.explorer.project.ProjectExplorerPresenter;
 import org.eclipse.che.ide.resources.tree.ResourceNode;
@@ -41,13 +41,13 @@ import static com.google.common.collect.Iterables.transform;
  * In case if project explorer has more than one selected file, comma separated file list is returned.
  *
  * @author Vlad Zhukovskyi
- * @see CommandMacro
+ * @see Macro
  * @see ProjectExplorerPresenter
  * @since 4.7.0
  */
 @Beta
 @Singleton
-public class ExplorerCurrentFileRelativePathMacro implements CommandMacro {
+public class ExplorerCurrentFileRelativePathMacro implements Macro {
 
     public static final String KEY = "${explorer.current.file.relpath}";
 

@@ -16,10 +16,10 @@ import org.eclipse.che.ide.api.command.CommandImpl;
 import org.eclipse.che.ide.api.command.CommandManager;
 
 /**
- * Expands all {@link CommandMacro}s in the given string.
+ * Expands all {@link Macro}s in the given string.
  *
  * @author Artem Zatsarynnyi
- * @see CommandMacro
+ * @see Macro
  * @see CommandManager#executeCommand(CommandImpl, Machine)
  */
 public interface MacroProcessor {

@@ -12,7 +12,7 @@ package org.eclipse.che.ide.api.command;
 
 import org.eclipse.che.api.core.model.machine.Machine;
 import org.eclipse.che.api.promises.client.Promise;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 
 import java.util.List;
 import java.util.Map;
@@ -56,14 +56,14 @@ public interface CommandManager {
 
     /**
      * Sends the the given {@code command} to the specified {@code machine} for execution.
-     * <p><b>Note</b> that all {@link CommandMacro}s will be expanded into
+     * <p><b>Note</b> that all {@link Macro}s will be expanded into
      * real values before sending the {@code command} for execution.
      *
      * @param command
      *         command to execute
      * @param machine
      *         machine to execute the command
-     * @see CommandMacro
+     * @see Macro
      */
     void executeCommand(CommandImpl command, Machine machine);
 

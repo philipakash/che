@@ -17,7 +17,7 @@ import com.google.inject.Singleton;
 
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.PromiseProvider;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.data.tree.Node;
 import org.eclipse.che.ide.api.resources.Project;
 import org.eclipse.che.ide.part.explorer.project.ProjectExplorerPresenter;
@@ -31,13 +31,13 @@ import java.util.List;
  * Macro provided: <code>${explorer.current.project.name}</code>
  *
  * @author Vlad Zhukovskyi
- * @see CommandMacro
+ * @see Macro
  * @see ProjectExplorerPresenter
  * @since 4.7.0
  */
 @Beta
 @Singleton
-public class ExplorerCurrentProjectNameMacro implements CommandMacro {
+public class ExplorerCurrentProjectNameMacro implements Macro {
 
     public static final String KEY = "${explorer.current.project.name}";
 

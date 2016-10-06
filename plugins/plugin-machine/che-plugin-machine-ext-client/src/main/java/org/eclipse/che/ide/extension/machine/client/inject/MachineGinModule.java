@@ -20,7 +20,7 @@ import com.google.inject.name.Names;
 import org.eclipse.che.api.machine.shared.Constants;
 import org.eclipse.che.ide.api.command.CommandManager;
 import org.eclipse.che.ide.api.command.CommandType;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.extension.ExtensionGinModule;
 import org.eclipse.che.ide.api.machine.MachineEntity;
 import org.eclipse.che.ide.api.machine.MachineManager;
@@ -109,8 +109,8 @@ public class MachineGinModule extends AbstractGinModule {
 
         GinMultibinder.newSetBinder(binder(), CommandType.class).addBinding().to(CustomCommandType.class);
 
-        final GinMultibinder<CommandMacro> valueProviderBinder =
-                GinMultibinder.newSetBinder(binder(), CommandMacro.class);
+        final GinMultibinder<Macro> valueProviderBinder =
+                GinMultibinder.newSetBinder(binder(), Macro.class);
         valueProviderBinder.addBinding().to(DevMachineHostNameMacro.class);
         valueProviderBinder.addBinding().to(CurrentProjectPathMacro.class);
         valueProviderBinder.addBinding().to(CurrentProjectRelativePathMacro.class);

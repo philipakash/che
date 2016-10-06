@@ -20,7 +20,7 @@ import org.eclipse.che.api.core.model.machine.Server;
 import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.js.Promises;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateEvent;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateHandler;
@@ -41,7 +41,7 @@ public class ServerPortProvider implements WsAgentStateHandler {
     private final MacroRegistry commandPropertyRegistry;
     private final AppContext    appContext;
 
-    private Set<CommandMacro> providers;
+    private Set<Macro> providers;
 
     @Inject
     public ServerPortProvider(EventBus eventBus,
@@ -63,8 +63,8 @@ public class ServerPortProvider implements WsAgentStateHandler {
         }
     }
 
-    private Set<CommandMacro> getProviders(Machine machine) {
-        Set<CommandMacro> providers = Sets.newHashSet();
+    private Set<Macro> getProviders(Machine machine) {
+        Set<Macro> providers = Sets.newHashSet();
         for (Map.Entry<String, ? extends Server> entry : machine.getRuntime().getServers().entrySet()) {
             providers.add(new AddressMacro(entry.getKey(),
                                            entry.getValue().getAddress(),
@@ -86,14 +86,14 @@ public class ServerPortProvider implements WsAgentStateHandler {
 
     @Override
     public void onWsAgentStopped(WsAgentStateEvent event) {
-        for (CommandMacro provider : providers) {
+        for (Macro provider : providers) {
             commandPropertyRegistry.unregister(provider);
         }
 
         providers.clear();
     }
 
-    private class AddressMacro implements CommandMacro {
+    private class AddressMacro implements Macro {
 
         String variable;
         String address;

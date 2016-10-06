@@ -20,10 +20,10 @@ import org.eclipse.che.api.machine.shared.Constants;
 import org.eclipse.che.api.promises.client.Operation;
 import org.eclipse.che.api.promises.client.OperationException;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.macro.CommandMacro;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.api.machine.DevMachine;
-import org.eclipse.che.ide.macro.CustomCommandMacro;
+import org.eclipse.che.ide.macro.CustomMacro;
 import org.eclipse.che.ide.macro.ServerHostNameMacro;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,15 +85,15 @@ public class ServerHostNameMacroTest {
 
     @Test
     public void getMacros() throws Exception {
-        final Set<CommandMacro> providers = provider.getMacros(devMachine);
+        final Set<Macro> providers = provider.getMacros(devMachine);
 
         assertEquals(providers.size(), 2);
 
-        final Iterator<CommandMacro> iterator = providers.iterator();
+        final Iterator<Macro> iterator = providers.iterator();
 
-        final CommandMacro provider1 = iterator.next();
+        final Macro provider1 = iterator.next();
 
-        assertTrue(provider1 instanceof CustomCommandMacro);
+        assertTrue(provider1 instanceof CustomMacro);
         assertEquals(provider1.getName(), ServerHostNameMacro.KEY.replace("%", WS_AGENT_PORT));
 
         provider1.expand().then(new Operation<String>() {
@@ -103,9 +103,9 @@ public class ServerHostNameMacroTest {
             }
         });
 
-        final CommandMacro provider2 = iterator.next();
+        final Macro provider2 = iterator.next();
 
-        assertTrue(provider2 instanceof CustomCommandMacro);
+        assertTrue(provider2 instanceof CustomMacro);
         assertEquals(provider2.getName(), ServerHostNameMacro.KEY.replace("%", WS_AGENT_PORT.substring(0, WS_AGENT_PORT.length() - 4)));
 
         provider2.expand().then(new Operation<String>() {
