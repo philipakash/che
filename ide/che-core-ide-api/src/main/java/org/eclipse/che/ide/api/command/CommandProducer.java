@@ -15,10 +15,11 @@ import org.eclipse.che.api.core.model.machine.Machine;
 import java.util.Set;
 
 /**
- * Defines the requirements for a component which can
- * produce the commands from the current context.
+ * Defines the requirements for a component which can produce the commands from the current context.
  * <p>For every registered {@link CommandProducer} an appropriate action
  * will be added in context menus (e.g., explorer, editor tab).
+ * <p>Implementor can restrict machine types where command may be executed with {@link #getMachineTypes()}.
+ * In that case, sub menu will be created with separate sub actions which are correspond to each machine.
  * <p>Implementations of this interface have to be registered with
  * a GIN multibinder in order to be picked-up on application's start-up.
  *
