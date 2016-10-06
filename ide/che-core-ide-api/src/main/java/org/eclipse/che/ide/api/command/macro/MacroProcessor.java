@@ -8,7 +8,7 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.extension.machine.client.command;
+package org.eclipse.che.ide.api.command.macro;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -20,8 +20,6 @@ import org.eclipse.che.api.promises.client.Promise;
 import org.eclipse.che.api.promises.client.js.Promises;
 import org.eclipse.che.ide.api.command.CommandImpl;
 import org.eclipse.che.ide.api.command.CommandManager;
-import org.eclipse.che.ide.api.command.macro.CommandMacro;
-import org.eclipse.che.ide.api.command.macro.CommandMacroRegistry;
 
 import java.util.Iterator;
 
@@ -35,11 +33,11 @@ import java.util.Iterator;
 @Singleton
 public class MacroProcessor {
 
-    private final CommandMacroRegistry commandMacroRegistry;
+    private final CommandMacroRegistry macroRegistry;
 
     @Inject
-    public MacroProcessor(CommandMacroRegistry commandMacroRegistry) {
-        this.commandMacroRegistry = commandMacroRegistry;
+    public MacroProcessor(CommandMacroRegistry macroRegistry) {
+        this.macroRegistry = macroRegistry;
     }
 
     /**
@@ -49,7 +47,7 @@ public class MacroProcessor {
     public Promise<String> expandMacros(String commandLine) {
         Promise<String> promise = Promises.resolve(null);
         CommandLineContainer commandLineContainer = new CommandLineContainer(commandLine);
-        return expandMacros(promise, commandLineContainer, commandMacroRegistry.getProviders().iterator());
+        return expandMacros(promise, commandLineContainer, macroRegistry.getMacros().iterator());
     }
 
     private Promise<String> expandMacros(Promise<String> promise,
@@ -66,8 +64,7 @@ public class MacroProcessor {
         return expandMacros(derivedPromise, commandLineContainer, iterator);
     }
 
-    private Function<String, Promise<String>> expandMacros(final CommandLineContainer commandLineContainer,
-                                                           final CommandMacro macro) {
+    private Function<String, Promise<String>> expandMacros(final CommandLineContainer commandLineContainer, final CommandMacro macro) {
         return new Function<String, Promise<String>>() {
             @Override
             public Promise<String> apply(String arg) throws FunctionException {

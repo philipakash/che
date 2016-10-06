@@ -23,11 +23,12 @@ import org.eclipse.che.api.machine.shared.dto.event.MachineProcessEvent;
 import org.eclipse.che.api.promises.client.Operation;
 import org.eclipse.che.api.promises.client.OperationException;
 import org.eclipse.che.api.promises.client.PromiseError;
+import org.eclipse.che.ide.api.command.CommandImpl;
+import org.eclipse.che.ide.api.command.CommandManager;
+import org.eclipse.che.ide.api.command.macro.MacroProcessor;
 import org.eclipse.che.ide.api.machine.CommandOutputMessageUnmarshaller;
 import org.eclipse.che.ide.api.machine.MachineServiceClient;
 import org.eclipse.che.ide.extension.machine.client.MachineResources;
-import org.eclipse.che.ide.api.command.CommandManager;
-import org.eclipse.che.ide.api.command.CommandImpl;
 import org.eclipse.che.ide.extension.machine.client.processes.ProcessFinishedEvent;
 import org.eclipse.che.ide.rest.AsyncRequestFactory;
 import org.eclipse.che.ide.rest.DtoUnmarshallerFactory;
@@ -85,6 +86,7 @@ public class CommandOutputConsolePresenter implements CommandOutputConsole, Outp
                                          MachineServiceClient machineServiceClient,
                                          MachineResources resources,
                                          CommandManager commandManager,
+                                         MacroProcessor macroProcessor,
                                          EventBus eventBus,
                                          AsyncRequestFactory asyncRequestFactory,
                                          @Assisted CommandImpl command,
@@ -104,7 +106,7 @@ public class CommandOutputConsolePresenter implements CommandOutputConsole, Outp
 
         final String previewUrl = command.getAttributes().get(PREVIEW_URL_ATTR);
         if (!isNullOrEmpty(previewUrl)) {
-            commandManager.expandMacros(previewUrl).then(new Operation<String>() {
+            macroProcessor.expandMacros(previewUrl).then(new Operation<String>() {
                 @Override
                 public void apply(String arg) throws OperationException {
                     view.showPreviewUrl(arg);

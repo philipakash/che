@@ -27,9 +27,9 @@ import org.eclipse.che.ide.api.app.AppContext;
 import org.eclipse.che.ide.api.command.CommandImpl;
 import org.eclipse.che.ide.api.command.CommandManager;
 import org.eclipse.che.ide.api.command.CommandPage;
-import org.eclipse.che.ide.api.command.CommandProducer;
 import org.eclipse.che.ide.api.command.CommandType;
 import org.eclipse.che.ide.api.command.CommandTypeRegistry;
+import org.eclipse.che.ide.api.command.macro.MacroProcessor;
 import org.eclipse.che.ide.api.machine.MachineServiceClient;
 import org.eclipse.che.ide.api.workspace.WorkspaceServiceClient;
 import org.eclipse.che.ide.api.workspace.event.WorkspaceStartedEvent;
@@ -64,7 +64,6 @@ public class CommandManagerImpl implements CommandManager {
     private final MacroProcessor          macroProcessor;
     private final CommandConsoleFactory   commandConsoleFactory;
     private final ProcessesPanelPresenter processesPanelPresenter;
-    private final Set<CommandProducer>    commandProducers;
 
     private final Map<String, CommandImpl>    commands;
     private final Set<CommandChangedListener> commandChangedListeners;
@@ -78,8 +77,7 @@ public class CommandManagerImpl implements CommandManager {
                               EventBus eventBus,
                               MacroProcessor macroProcessor,
                               CommandConsoleFactory commandConsoleFactory,
-                              ProcessesPanelPresenter processesPanelPresenter,
-                              Set<CommandProducer> commandProducers) {
+                              ProcessesPanelPresenter processesPanelPresenter) {
         this.commandTypeRegistry = commandTypeRegistry;
         this.appContext = appContext;
         this.workspaceServiceClient = workspaceServiceClient;
@@ -88,7 +86,6 @@ public class CommandManagerImpl implements CommandManager {
         this.macroProcessor = macroProcessor;
         this.commandConsoleFactory = commandConsoleFactory;
         this.processesPanelPresenter = processesPanelPresenter;
-        this.commandProducers = commandProducers;
 
         commands = new HashMap<>();
         commandChangedListeners = new HashSet<>();
@@ -225,11 +222,6 @@ public class CommandManagerImpl implements CommandManager {
     }
 
     @Override
-    public List<CommandProducer> getCommandProducers() {
-        return new ArrayList<>(commandProducers);
-    }
-
-    @Override
     public void executeCommand(final CommandImpl command, final Machine machine) {
         final String outputChannel = "process:output:" + UUID.uuid();
 
@@ -237,7 +229,7 @@ public class CommandManagerImpl implements CommandManager {
         console.listenToOutput(outputChannel);
         processesPanelPresenter.addCommandOutput(machine.getId(), console);
 
-        expandMacros(command.getCommandLine()).then(new Operation<String>() {
+        macroProcessor.expandMacros(command.getCommandLine()).then(new Operation<String>() {
             @Override
             public void apply(String arg) throws OperationException {
                 final CommandImpl toExecute = new CommandImpl(command);
@@ -255,11 +247,6 @@ public class CommandManagerImpl implements CommandManager {
                 });
             }
         });
-    }
-
-    @Override
-    public Promise<String> expandMacros(String commandLine) {
-        return macroProcessor.expandMacros(commandLine);
     }
 
     @Override

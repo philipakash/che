@@ -21,18 +21,18 @@ import java.util.Set;
  */
 public interface CommandMacroRegistry {
 
-    /** Register set of property value providers. */
-    void register(Set<CommandMacro> valueProviders);
+    /** Register set of macros. */
+    void register(Set<CommandMacro> macros);
 
-    /** Unregister specific property value provider. */
-    void unregister(CommandMacro valueProvider);
+    /** Unregister the given macro. */
+    void unregister(CommandMacro macro);
 
-    /** Returns keys of all registered {@link CommandMacro}s. */
-    Set<String> getKeys();
+    /** Returns the names of all registered {@link CommandMacro}s. */
+    Set<String> getNames();
 
-    /** Returns {@link CommandMacro} by the given key. */
-    CommandMacro getProvider(String key);
+    /** Returns {@link CommandMacro} by it's name. */
+    CommandMacro getMacro(String name);
 
     /** Returns all registered {@link CommandMacro}s. */
-    List<CommandMacro> getProviders();
+    List<CommandMacro> getMacros();
 }

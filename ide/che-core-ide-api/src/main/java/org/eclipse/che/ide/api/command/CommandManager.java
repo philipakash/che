@@ -54,9 +54,6 @@ public interface CommandManager {
     /** Returns the pages for editing command of the specified {@code type}. */
     List<CommandPage> getPages(String type);
 
-    /** Returns all command producers. */
-    List<CommandProducer> getCommandProducers();
-
     /**
      * Sends the the given {@code command} to the specified {@code machine} for execution.
      * <p><b>Note</b> that all {@link CommandMacro}s will be expanded into
@@ -67,18 +64,8 @@ public interface CommandManager {
      * @param machine
      *         machine to execute the command
      * @see CommandMacro
-     * @see #expandMacros(String)
      */
     void executeCommand(CommandImpl command, Machine machine);
-
-    /**
-     * Expands all macros in the given {@code commandLine}.
-     * <p>If {@link CommandManager} is unable to find a macro, the macro will not be expanded.
-     *
-     * @see CommandMacro
-     * @see #executeCommand(CommandImpl, Machine)
-     */
-    Promise<String> expandMacros(String commandLine);
 
     void addCommandChangedListener(CommandChangedListener listener);
 

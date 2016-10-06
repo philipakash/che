@@ -29,41 +29,41 @@ import java.util.Set;
  */
 public class CommandMacroRegistryImpl implements CommandMacroRegistry {
 
-    private final Map<String, CommandMacro> valueProviders;
+    private final Map<String, CommandMacro> macros;
 
     public CommandMacroRegistryImpl() {
-        this.valueProviders = new HashMap<>();
+        this.macros = new HashMap<>();
     }
 
     @Inject(optional = true)
-    public void register(Set<CommandMacro> valueProviders) {
-        for (CommandMacro provider : valueProviders) {
-            final String key = provider.getName();
-            if (this.valueProviders.containsKey(key)) {
-                Log.warn(CommandMacroRegistryImpl.class, "Command macro '" + key + "' is already registered.");
+    public void register(Set<CommandMacro> macros) {
+        for (CommandMacro macro : macros) {
+            final String name = macro.getName();
+            if (this.macros.containsKey(name)) {
+                Log.warn(CommandMacroRegistryImpl.class, "Command macro '" + name + "' is already registered.");
             } else {
-                this.valueProviders.put(key, provider);
+                this.macros.put(name, macro);
             }
         }
     }
 
     @Override
-    public void unregister(CommandMacro valueProvider) {
-        valueProviders.remove(valueProvider.getName());
+    public void unregister(CommandMacro macro) {
+        macros.remove(macro.getName());
     }
 
     @Override
-    public CommandMacro getProvider(String key) {
-        return valueProviders.get(key);
+    public CommandMacro getMacro(String name) {
+        return macros.get(name);
     }
 
     @Override
-    public List<CommandMacro> getProviders() {
-        return new ArrayList<>(valueProviders.values());
+    public List<CommandMacro> getMacros() {
+        return new ArrayList<>(macros.values());
     }
 
     @Override
-    public Set<String> getKeys() {
-        return valueProviders.keySet();
+    public Set<String> getNames() {
+        return macros.keySet();
     }
 }

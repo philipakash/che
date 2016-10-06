@@ -20,7 +20,7 @@ import org.eclipse.che.ide.api.command.CommandManager;
  * before sending command to the machine for execution.
  *
  * @author Artem Zatsarynnyi
- * @see CommandManager#expandMacros(String)
+ * @see MacroProcessor#expandMacros(String)
  * @see CommandManager#executeCommand(CommandImpl, Machine)
  */
 public interface CommandMacro {
