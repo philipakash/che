@@ -16,7 +16,7 @@ import com.google.inject.Singleton;
 
 import org.eclipse.che.ide.api.debug.DebugConfiguration;
 import org.eclipse.che.ide.api.debug.DebugConfigurationPage;
-import org.eclipse.che.ide.extension.machine.client.command.valueproviders.CurrentProjectPathProvider;
+import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathProvider;
 
 import java.util.Map;
 
@@ -67,7 +67,7 @@ public class NodeJsDebuggerConfigurationPagePresenter implements NodeJsDebuggerC
     }
 
     private String getDefaultBinaryPath() {
-        return currentProjectPathProvider.getKey() + "/" + DEFAULT_SCRIPT_NAME;
+        return currentProjectPathProvider.getName() + "/" + DEFAULT_SCRIPT_NAME;
     }
 
     @Override
