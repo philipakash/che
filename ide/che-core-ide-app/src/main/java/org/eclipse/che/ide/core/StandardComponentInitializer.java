@@ -62,10 +62,10 @@ import org.eclipse.che.ide.api.icon.Icon;
 import org.eclipse.che.ide.api.icon.IconRegistry;
 import org.eclipse.che.ide.api.keybinding.KeyBindingAgent;
 import org.eclipse.che.ide.api.keybinding.KeyBuilder;
-import org.eclipse.che.ide.command.macro.ServerHostNameMacroProvider;
-import org.eclipse.che.ide.command.macro.ServerMacroProvider;
-import org.eclipse.che.ide.command.macro.ServerPortMacroProvider;
-import org.eclipse.che.ide.command.macro.ServerProtocolMacroProvider;
+import org.eclipse.che.ide.command.macro.ServerHostNameMacro;
+import org.eclipse.che.ide.command.macro.ServerMacro;
+import org.eclipse.che.ide.command.macro.ServerPortMacro;
+import org.eclipse.che.ide.command.macro.ServerProtocolMacro;
 import org.eclipse.che.ide.connection.WsConnectionListener;
 import org.eclipse.che.ide.imageviewer.ImageViewerProvider;
 import org.eclipse.che.ide.newresource.NewFileAction;
@@ -350,16 +350,16 @@ public class StandardComponentInitializer {
 
     // do not remove the injections below
     @Inject
-    private ServerMacroProvider serverMacroProvider;
+    private ServerMacro serverMacro;
 
     @Inject
-    private ServerProtocolMacroProvider serverProtocolMacroProvider;
+    private ServerProtocolMacro serverProtocolMacro;
 
     @Inject
-    private ServerHostNameMacroProvider serverHostNameMacroProvider;
+    private ServerHostNameMacro serverHostNameMacro;
 
     @Inject
-    private ServerPortMacroProvider serverPortMacroProvider;
+    private ServerPortMacro serverPortMacro;
 
 
     /** Instantiates {@link StandardComponentInitializer} an creates standard content. */
