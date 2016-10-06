@@ -21,7 +21,6 @@ import org.eclipse.che.ide.api.action.ActionManager;
 import org.eclipse.che.ide.api.action.DefaultActionGroup;
 import org.eclipse.che.ide.api.action.IdeActions;
 import org.eclipse.che.ide.api.app.AppContext;
-import org.eclipse.che.ide.api.command.CommandProducer;
 import org.eclipse.che.ide.api.constraints.Constraints;
 import org.eclipse.che.ide.api.extension.Extension;
 import org.eclipse.che.ide.api.icon.Icon;
@@ -47,7 +46,7 @@ import org.eclipse.che.ide.extension.machine.client.actions.SelectCommandComboBo
 import org.eclipse.che.ide.extension.machine.client.actions.SwitchPerspectiveAction;
 import org.eclipse.che.ide.extension.machine.client.command.custom.CustomCommandType;
 import org.eclipse.che.ide.extension.machine.client.command.macros.ServerPortProvider;
-import org.eclipse.che.ide.extension.machine.client.command.producer.CommandProducerActionFactory;
+import org.eclipse.che.ide.extension.machine.client.command.producer.CommandProducerActionManager;
 import org.eclipse.che.ide.extension.machine.client.machine.MachineStatusHandler;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.CloseConsoleAction;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.ReRunProcessAction;
@@ -57,12 +56,8 @@ import org.eclipse.che.ide.extension.machine.client.targets.EditTargetsAction;
 import org.eclipse.che.ide.part.explorer.project.ProjectExplorerPresenter;
 import org.eclipse.che.ide.util.input.KeyCodeMap;
 
-import java.util.Set;
-
 import static org.eclipse.che.ide.api.action.IdeActions.GROUP_CENTER_TOOLBAR;
 import static org.eclipse.che.ide.api.action.IdeActions.GROUP_CONSOLES_TREE_CONTEXT_MENU;
-import static org.eclipse.che.ide.api.action.IdeActions.GROUP_EDITOR_TAB_CONTEXT_MENU;
-import static org.eclipse.che.ide.api.action.IdeActions.GROUP_MAIN_CONTEXT_MENU;
 import static org.eclipse.che.ide.api.action.IdeActions.GROUP_MAIN_MENU;
 import static org.eclipse.che.ide.api.action.IdeActions.GROUP_RIGHT_TOOLBAR;
 import static org.eclipse.che.ide.api.action.IdeActions.GROUP_RUN;
@@ -192,8 +187,7 @@ public class MachineExtension {
                                 ReRunProcessAction reRunProcessAction,
                                 StopProcessAction stopProcessAction,
                                 CloseConsoleAction closeConsoleAction,
-                                CommandProducerActionFactory commandProducerActionFactory,
-                                Set<CommandProducer> commandProducers) {
+                                CommandProducerActionManager commandProducerActionManager) {
         final DefaultActionGroup mainMenu = (DefaultActionGroup)actionManager.getAction(GROUP_MAIN_MENU);
 
         final DefaultActionGroup workspaceMenu = (DefaultActionGroup)actionManager.getAction(GROUP_WORKSPACE);
@@ -264,17 +258,16 @@ public class MachineExtension {
         consolesTreeContextMenu.add(stopProcessAction);
         consolesTreeContextMenu.add(closeConsoleAction);
 
-
         // populate context commands
-        DefaultActionGroup commandActionsGroup = new DefaultActionGroup(actionManager);
-        commandActionsGroup.addSeparator();
-        for (CommandProducer commandProducer : commandProducers) {
-            commandActionsGroup.add(commandProducerActionFactory.create(commandProducer));
-        }
-        DefaultActionGroup mainContextMenu = (DefaultActionGroup)actionManager.getAction(GROUP_MAIN_CONTEXT_MENU);
-        DefaultActionGroup editorTabContextMenu = (DefaultActionGroup)actionManager.getAction(GROUP_EDITOR_TAB_CONTEXT_MENU);
-        mainContextMenu.add(commandActionsGroup);
-        editorTabContextMenu.add(commandActionsGroup);
+//        DefaultActionGroup commandActionsGroup = new DefaultActionGroup(actionManager);
+//        commandActionsGroup.addSeparator();
+//        for (CommandProducer commandProducer : commandProducers) {
+//            commandActionsGroup.add(commandProducerActionFactory.create(commandProducer));
+//        }
+//        DefaultActionGroup mainContextMenu = (DefaultActionGroup)actionManager.getAction(GROUP_MAIN_CONTEXT_MENU);
+//        DefaultActionGroup editorTabContextMenu = (DefaultActionGroup)actionManager.getAction(GROUP_EDITOR_TAB_CONTEXT_MENU);
+//        mainContextMenu.add(commandActionsGroup);
+//        editorTabContextMenu.add(commandActionsGroup);
 
 
         // Define hot-keys

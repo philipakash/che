@@ -176,6 +176,7 @@ import org.eclipse.che.ide.part.explorer.project.ProjectExplorerViewImpl;
 import org.eclipse.che.ide.part.explorer.project.RevealNodesPersistenceComponent;
 import org.eclipse.che.ide.part.explorer.project.TreeResourceRevealer;
 import org.eclipse.che.ide.part.explorer.project.macro.ExplorerCurrentFileNameProvider;
+import org.eclipse.che.ide.part.explorer.project.macro.ExplorerCurrentFileParentPathProvider;
 import org.eclipse.che.ide.part.explorer.project.macro.ExplorerCurrentFilePathProvider;
 import org.eclipse.che.ide.part.explorer.project.macro.ExplorerCurrentFileRelativePathProvider;
 import org.eclipse.che.ide.part.explorer.project.macro.ExplorerCurrentProjectNameProvider;
@@ -501,6 +502,7 @@ public class CoreGinModule extends AbstractGinModule {
         macroProviders.addBinding().to(EditorCurrentProjectTypeProvider.class);
         macroProviders.addBinding().to(ExplorerCurrentFileNameProvider.class);
         macroProviders.addBinding().to(ExplorerCurrentFilePathProvider.class);
+        macroProviders.addBinding().to(ExplorerCurrentFileParentPathProvider.class);
         macroProviders.addBinding().to(ExplorerCurrentFileRelativePathProvider.class);
         macroProviders.addBinding().to(ExplorerCurrentProjectNameProvider.class);
         macroProviders.addBinding().to(ExplorerCurrentProjectTypeProvider.class);

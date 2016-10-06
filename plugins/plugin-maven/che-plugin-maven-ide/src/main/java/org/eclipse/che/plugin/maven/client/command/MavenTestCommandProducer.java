@@ -14,6 +14,7 @@ import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import org.eclipse.che.api.core.model.machine.Machine;
 import org.eclipse.che.ide.api.app.AppContext;
 import org.eclipse.che.ide.api.command.CommandImpl;
 import org.eclipse.che.ide.api.command.CommandProducer;
@@ -23,6 +24,9 @@ import org.eclipse.che.ide.api.resources.Project;
 import org.eclipse.che.ide.api.resources.Resource;
 import org.eclipse.che.ide.ext.java.client.resource.SourceFolderMarker;
 import org.eclipse.che.ide.ext.java.client.util.JavaUtil;
+
+import java.util.Collections;
+import java.util.Set;
 
 import static org.eclipse.che.ide.api.resources.Resource.FILE;
 import static org.eclipse.che.ide.ext.java.client.util.JavaUtil.isJavaFile;
@@ -71,7 +75,7 @@ public class MavenTestCommandProducer implements CommandProducer {
     }
 
     @Override
-    public CommandImpl createCommand() {
+    public CommandImpl createCommand(Machine machine) {
         final Optional<Project> projectOptional = appContext.getResource().getRelatedProject();
 
         String workingDirectory = null;
@@ -83,6 +87,11 @@ public class MavenTestCommandProducer implements CommandProducer {
         MavenCommandModel mavenCommandModel = new MavenCommandModel("/projects" + workingDirectory, "test -Dtest=" + getCurrentClassFQN());
 
         return new CommandImpl("name", mavenCommandModel.toCommandLine(), "mvn");
+    }
+
+    @Override
+    public Set<String> getMachineTypes() {
+        return Collections.emptySet();
     }
 
     private String getCurrentClassFQN() {

@@ -14,11 +14,15 @@ import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import org.eclipse.che.api.core.model.machine.Machine;
 import org.eclipse.che.ide.api.app.AppContext;
 import org.eclipse.che.ide.api.command.CommandImpl;
 import org.eclipse.che.ide.api.command.CommandProducer;
 import org.eclipse.che.ide.api.resources.Project;
 import org.eclipse.che.ide.api.resources.Resource;
+
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Produces commands for building module with Maven.
@@ -83,7 +87,7 @@ public class MavenBuildCommandProducer implements CommandProducer {
     }
 
     @Override
-    public CommandImpl createCommand() {
+    public CommandImpl createCommand(Machine machine) {
         final Optional<Project> projectOptional = appContext.getResource().getRelatedProject();
 
         String workingDirectory = null;
@@ -95,5 +99,10 @@ public class MavenBuildCommandProducer implements CommandProducer {
         MavenCommandModel mavenCommandModel = new MavenCommandModel("/projects" + workingDirectory, "clean install");
 
         return new CommandImpl("name", mavenCommandModel.toCommandLine(), "mvn");
+    }
+
+    @Override
+    public Set<String> getMachineTypes() {
+        return Collections.emptySet();
     }
 }

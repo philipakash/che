@@ -626,6 +626,7 @@ public class StandardComponentInitializer {
         editorTabContextMenu.add(splitVerticallyAction);
         actionManager.registerAction("splitHorizontally", splitHorizontallyAction);
         editorTabContextMenu.add(splitHorizontallyAction);
+        editorTabContextMenu.addSeparator();
 
         actionManager.registerAction("noOpAction", new NoOpAction());
         actionManager.registerAction("signatureHelp", signatureHelpAction);

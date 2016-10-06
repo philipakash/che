@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.che.ide.extension.machine.client.command.producer;
 
+import org.eclipse.che.api.core.model.machine.Machine;
 import org.eclipse.che.ide.api.command.CommandProducer;
 
 /**
@@ -20,5 +21,5 @@ import org.eclipse.che.ide.api.command.CommandProducer;
 public interface CommandProducerActionFactory {
 
     /** Creates action for executing command produced by the specified {@code commandProducer}. */
-    CommandProducerAction create(CommandProducer commandProducer);
+    CommandProducerAction create(String name, CommandProducer commandProducer, Machine machine);
 }

@@ -13,9 +13,9 @@ package org.eclipse.che.ide.extension.machine.client.command.producer;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
+import org.eclipse.che.api.core.model.machine.Machine;
 import org.eclipse.che.ide.api.action.Action;
 import org.eclipse.che.ide.api.action.ActionEvent;
-import org.eclipse.che.ide.api.app.AppContext;
 import org.eclipse.che.ide.api.command.CommandImpl;
 import org.eclipse.che.ide.api.command.CommandManager;
 import org.eclipse.che.ide.api.command.CommandProducer;
@@ -29,27 +29,29 @@ import org.eclipse.che.ide.api.command.CommandProducer;
 public class CommandProducerAction extends Action {
 
     private final CommandProducer commandProducer;
+    private final Machine         machine;
     private final CommandManager  commandManager;
-    private final AppContext      appContext;
 
     @Inject
-    public CommandProducerAction(@Assisted CommandProducer commandProducer, CommandManager commandManager, AppContext appContext) {
-        super();
+    public CommandProducerAction(@Assisted String name,
+                                 @Assisted CommandProducer commandProducer,
+                                 @Assisted Machine machine,
+                                 CommandManager commandManager) {
+        super(name);
 
         this.commandProducer = commandProducer;
+        this.machine = machine;
         this.commandManager = commandManager;
-        this.appContext = appContext;
     }
 
     @Override
     public void update(ActionEvent e) {
-        e.getPresentation().setText(commandProducer.getName());
         e.getPresentation().setEnabledAndVisible(commandProducer.isApplicable());
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        final CommandImpl command = commandProducer.createCommand();
-        commandManager.executeCommand(command, appContext.getDevMachine().getDescriptor());
+        CommandImpl command = commandProducer.createCommand(machine);
+        commandManager.executeCommand(command, machine);
     }
 }
