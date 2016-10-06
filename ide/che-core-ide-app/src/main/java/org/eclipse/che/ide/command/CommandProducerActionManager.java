@@ -8,26 +8,27 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.extension.machine.client.command.producer;
+package org.eclipse.che.ide.command;
 
+import com.google.gwt.core.client.Callback;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
 import org.eclipse.che.api.core.model.machine.Machine;
-import org.eclipse.che.api.core.model.workspace.Workspace;
-import org.eclipse.che.api.core.model.workspace.WorkspaceRuntime;
 import org.eclipse.che.api.machine.shared.dto.MachineDto;
+import org.eclipse.che.api.promises.client.Operation;
+import org.eclipse.che.api.promises.client.OperationException;
 import org.eclipse.che.ide.api.action.Action;
 import org.eclipse.che.ide.api.action.ActionManager;
 import org.eclipse.che.ide.api.action.DefaultActionGroup;
 import org.eclipse.che.ide.api.app.AppContext;
 import org.eclipse.che.ide.api.command.CommandProducer;
-import org.eclipse.che.ide.api.machine.MachineEntity;
+import org.eclipse.che.ide.api.component.Component;
+import org.eclipse.che.ide.api.machine.MachineServiceClient;
+import org.eclipse.che.ide.api.machine.events.MachineStateEvent;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateEvent;
 import org.eclipse.che.ide.api.machine.events.WsAgentStateHandler;
-import org.eclipse.che.ide.extension.machine.client.inject.factories.EntityFactory;
-import org.eclipse.che.ide.extension.machine.client.machine.MachineStateEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static java.util.Collections.emptyList;
 import static org.eclipse.che.ide.api.action.IdeActions.GROUP_EDITOR_TAB_CONTEXT_MENU;
 import static org.eclipse.che.ide.api.action.IdeActions.GROUP_MAIN_CONTEXT_MENU;
 
@@ -51,18 +51,18 @@ import static org.eclipse.che.ide.api.action.IdeActions.GROUP_MAIN_CONTEXT_MENU;
  * @see CommandProducer
  */
 @Singleton
-public class CommandProducerActionManager implements MachineStateEvent.Handler, WsAgentStateHandler {
+public class CommandProducerActionManager implements MachineStateEvent.Handler, WsAgentStateHandler, Component {
 
     private final ActionManager                actionManager;
     private final CommandProducerActionFactory commandProducerActionFactory;
     private final AppContext                   appContext;
-    private final EntityFactory                entityFactory;
+    private final MachineServiceClient         machineServiceClient;
 
     private final List<Machine>                            machines;
     private final Set<CommandProducer>                     commandProducers;
-    private final Map<Action, DefaultActionGroup>          actions2ActionGroups;
+    private final Map<Action, DefaultActionGroup>          actionsToActionGroups;
     private final Map<Machine, List<Action>>               actionsByMachines;
-    private final Map<CommandProducer, DefaultActionGroup> producers2ActionGroups;
+    private final Map<CommandProducer, DefaultActionGroup> producersToActionGroups;
 
     private DefaultActionGroup commandProducersActionsGroup;
 
@@ -71,17 +71,17 @@ public class CommandProducerActionManager implements MachineStateEvent.Handler, 
                                         ActionManager actionManager,
                                         CommandProducerActionFactory commandProducerActionFactory,
                                         AppContext appContext,
-                                        EntityFactory entityFactory) {
+                                        MachineServiceClient machineServiceClient) {
         this.actionManager = actionManager;
         this.commandProducerActionFactory = commandProducerActionFactory;
         this.appContext = appContext;
-        this.entityFactory = entityFactory;
+        this.machineServiceClient = machineServiceClient;
 
         machines = new ArrayList<>();
         commandProducers = new HashSet<>();
-        actions2ActionGroups = new HashMap<>();
+        actionsToActionGroups = new HashMap<>();
         actionsByMachines = new HashMap<>();
-        producers2ActionGroups = new HashMap<>();
+        producersToActionGroups = new HashMap<>();
 
         eventBus.addHandler(MachineStateEvent.TYPE, this);
         eventBus.addHandler(WsAgentStateEvent.TYPE, this);
@@ -99,31 +99,18 @@ public class CommandProducerActionManager implements MachineStateEvent.Handler, 
 
         DefaultActionGroup editorTabContextMenu = (DefaultActionGroup)actionManager.getAction(GROUP_EDITOR_TAB_CONTEXT_MENU);
         editorTabContextMenu.add(commandProducersActionsGroup);
-
-        fetchMachines();
     }
 
-    private void fetchMachines() {
-        List<MachineEntity> machines = getMachines(appContext.getWorkspace());
-        machines.addAll(machines);
-    }
+    @Override
+    public void start(final Callback<Component, Exception> callback) {
+        machineServiceClient.getMachines(appContext.getWorkspaceId()).then(new Operation<List<MachineDto>>() {
+            @Override
+            public void apply(List<MachineDto> arg) throws OperationException {
+                machines.addAll(arg);
 
-    private List<MachineEntity> getMachines(Workspace workspace) {
-        WorkspaceRuntime workspaceRuntime = workspace.getRuntime();
-        if (workspaceRuntime == null) {
-            return emptyList();
-        }
-
-        List<? extends Machine> runtimeMachines = workspaceRuntime.getMachines();
-        List<MachineEntity> machines = new ArrayList<>(runtimeMachines.size());
-        for (Machine machine : runtimeMachines) {
-            if (machine instanceof MachineDto) {
-                MachineEntity machineEntity = entityFactory.createMachine((MachineDto)machine);
-                machines.add(machineEntity);
+                callback.onSuccess(CommandProducerActionManager.this);
             }
-
-        }
-        return machines;
+        });
     }
 
     @Override
@@ -166,7 +153,7 @@ public class CommandProducerActionManager implements MachineStateEvent.Handler, 
         } else {
             action = new DefaultActionGroup(producer.getName(), true, actionManager);
 
-            producers2ActionGroups.put(producer, (DefaultActionGroup)action);
+            producersToActionGroups.put(producer, (DefaultActionGroup)action);
 
             actionManager.registerAction(producer.getName(), action);
 
@@ -197,11 +184,11 @@ public class CommandProducerActionManager implements MachineStateEvent.Handler, 
 
                 actionManager.registerAction(machine.getConfig().getName(), machineAction);
 
-                DefaultActionGroup actionGroup = producers2ActionGroups.get(commandProducer);
+                DefaultActionGroup actionGroup = producersToActionGroups.get(commandProducer);
                 if (actionGroup != null) {
                     actionGroup.add(machineAction);
 
-                    actions2ActionGroups.put(machineAction, actionGroup);
+                    actionsToActionGroups.put(machineAction, actionGroup);
                 }
             }
         }
@@ -211,7 +198,7 @@ public class CommandProducerActionManager implements MachineStateEvent.Handler, 
         List<Action> actions = actionsByMachines.remove(machine);
         if (actions != null) {
             for (Action action : actions) {
-                DefaultActionGroup actionGroup = actions2ActionGroups.remove(action);
+                DefaultActionGroup actionGroup = actionsToActionGroups.remove(action);
                 if (actionGroup != null) {
                     actionGroup.remove(action);
 

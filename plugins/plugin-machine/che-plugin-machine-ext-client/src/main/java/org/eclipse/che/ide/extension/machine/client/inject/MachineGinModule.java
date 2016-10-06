@@ -20,10 +20,10 @@ import com.google.inject.name.Names;
 import org.eclipse.che.api.machine.shared.Constants;
 import org.eclipse.che.ide.api.command.CommandManager;
 import org.eclipse.che.ide.api.command.CommandType;
-import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.extension.ExtensionGinModule;
 import org.eclipse.che.ide.api.machine.MachineEntity;
 import org.eclipse.che.ide.api.machine.MachineManager;
+import org.eclipse.che.ide.api.macro.Macro;
 import org.eclipse.che.ide.api.outputconsole.OutputConsole;
 import org.eclipse.che.ide.api.parts.Perspective;
 import org.eclipse.che.ide.extension.machine.client.RecipeScriptDownloadServiceClient;
@@ -35,7 +35,6 @@ import org.eclipse.che.ide.extension.machine.client.command.edit.EditCommandsVie
 import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectPathMacro;
 import org.eclipse.che.ide.extension.machine.client.command.macros.CurrentProjectRelativePathMacro;
 import org.eclipse.che.ide.extension.machine.client.command.macros.DevMachineHostNameMacro;
-import org.eclipse.che.ide.extension.machine.client.command.producer.CommandProducerActionFactory;
 import org.eclipse.che.ide.extension.machine.client.inject.factories.EntityFactory;
 import org.eclipse.che.ide.extension.machine.client.inject.factories.TerminalFactory;
 import org.eclipse.che.ide.extension.machine.client.inject.factories.WidgetsFactory;
@@ -88,8 +87,9 @@ public class MachineGinModule extends AbstractGinModule {
 
     @Override
     protected void configure() {
-        GinMapBinder<String, Perspective> perspectiveBinder = GinMapBinder.newMapBinder(binder(), String.class, Perspective.class);
-        perspectiveBinder.addBinding(OPERATIONS_PERSPECTIVE_ID).to(OperationsPerspective.class);
+        GinMapBinder.newMapBinder(binder(), String.class, Perspective.class)
+                    .addBinding(OPERATIONS_PERSPECTIVE_ID)
+                    .to(OperationsPerspective.class);
 
         bind(CreateMachineView.class).to(CreateMachineViewImpl.class);
         bind(OutputConsoleView.class).to(OutputConsoleViewImpl.class);
@@ -103,17 +103,14 @@ public class MachineGinModule extends AbstractGinModule {
         bind(CommandManager.class).to(CommandManagerImpl.class).in(Singleton.class);
         bind(EditCommandsView.class).to(EditCommandsViewImpl.class).in(Singleton.class);
 
-        install(new GinFactoryModuleBuilder().build(CommandProducerActionFactory.class));
-
         bind(TargetsView.class).to(TargetsViewImpl.class).in(Singleton.class);
 
         GinMultibinder.newSetBinder(binder(), CommandType.class).addBinding().to(CustomCommandType.class);
 
-        final GinMultibinder<Macro> valueProviderBinder =
-                GinMultibinder.newSetBinder(binder(), Macro.class);
-        valueProviderBinder.addBinding().to(DevMachineHostNameMacro.class);
-        valueProviderBinder.addBinding().to(CurrentProjectPathMacro.class);
-        valueProviderBinder.addBinding().to(CurrentProjectRelativePathMacro.class);
+        final GinMultibinder<Macro> macrosBinder = GinMultibinder.newSetBinder(binder(), Macro.class);
+        macrosBinder.addBinding().to(DevMachineHostNameMacro.class);
+        macrosBinder.addBinding().to(CurrentProjectPathMacro.class);
+        macrosBinder.addBinding().to(CurrentProjectRelativePathMacro.class);
 
         install(new GinFactoryModuleBuilder().implement(TabHeader.class, TabHeaderImpl.class)
                                              .implement(EditorButtonWidget.class, EditorButtonWidgetImpl.class)

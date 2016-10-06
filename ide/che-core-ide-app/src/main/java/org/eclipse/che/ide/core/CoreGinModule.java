@@ -30,9 +30,6 @@ import org.eclipse.che.ide.api.app.AppContext;
 import org.eclipse.che.ide.api.auth.OAuthServiceClient;
 import org.eclipse.che.ide.api.auth.OAuthServiceClientImpl;
 import org.eclipse.che.ide.api.command.CommandTypeRegistry;
-import org.eclipse.che.ide.api.macro.Macro;
-import org.eclipse.che.ide.api.macro.MacroRegistry;
-import org.eclipse.che.ide.api.macro.MacroProcessor;
 import org.eclipse.che.ide.api.component.Component;
 import org.eclipse.che.ide.api.component.WsAgentComponent;
 import org.eclipse.che.ide.api.data.tree.NodeInterceptor;
@@ -66,6 +63,9 @@ import org.eclipse.che.ide.api.machine.MachineServiceClient;
 import org.eclipse.che.ide.api.machine.MachineServiceClientImpl;
 import org.eclipse.che.ide.api.machine.RecipeServiceClient;
 import org.eclipse.che.ide.api.machine.RecipeServiceClientImpl;
+import org.eclipse.che.ide.api.macro.Macro;
+import org.eclipse.che.ide.api.macro.MacroProcessor;
+import org.eclipse.che.ide.api.macro.MacroRegistry;
 import org.eclipse.che.ide.api.notification.NotificationManager;
 import org.eclipse.che.ide.api.oauth.OAuth2Authenticator;
 import org.eclipse.che.ide.api.oauth.OAuth2AuthenticatorRegistry;
@@ -114,9 +114,9 @@ import org.eclipse.che.ide.api.workspace.WorkspaceServiceClient;
 import org.eclipse.che.ide.api.workspace.WorkspaceServiceClientImpl;
 import org.eclipse.che.ide.client.StartUpActionsProcessor;
 import org.eclipse.che.ide.client.WorkspaceStateRestorer;
+import org.eclipse.che.ide.command.CommandProducerActionFactory;
+import org.eclipse.che.ide.command.CommandProducerActionManager;
 import org.eclipse.che.ide.command.CommandTypeRegistryImpl;
-import org.eclipse.che.ide.macro.MacroRegistryImpl;
-import org.eclipse.che.ide.macro.MacroProcessorImpl;
 import org.eclipse.che.ide.context.AppContextImpl;
 import org.eclipse.che.ide.editor.EditorAgentImpl;
 import org.eclipse.che.ide.editor.EditorRegistryImpl;
@@ -150,6 +150,8 @@ import org.eclipse.che.ide.jsonrpc.impl.WebSocketJsonRpcRequestTransmitter;
 import org.eclipse.che.ide.jsonrpc.impl.WebSocketJsonRpcResponseDispatcher;
 import org.eclipse.che.ide.jsonrpc.impl.WebSocketJsonRpcResponseTransmitter;
 import org.eclipse.che.ide.keybinding.KeyBindingManager;
+import org.eclipse.che.ide.macro.MacroProcessorImpl;
+import org.eclipse.che.ide.macro.MacroRegistryImpl;
 import org.eclipse.che.ide.menu.MainMenuView;
 import org.eclipse.che.ide.menu.MainMenuViewImpl;
 import org.eclipse.che.ide.menu.StatusPanelGroupView;
@@ -327,9 +329,9 @@ public class CoreGinModule extends AbstractGinModule {
 
         bind(AppContext.class).to(AppContextImpl.class);
 
+        install(new GinFactoryModuleBuilder().build(LoaderFactory.class));
         install(new GinFactoryModuleBuilder().build(PopupLoaderFactory.class));
 
-        install(new GinFactoryModuleBuilder().build(LoaderFactory.class));
         install(new GinFactoryModuleBuilder().implement(PartStackView.class, PartStackViewImpl.class).build(PartStackViewFactory.class));
         install(new GinFactoryModuleBuilder().implement(PartStack.class, PartStackPresenter.class).build(PartStackPresenterFactory.class));
 
@@ -432,6 +434,7 @@ public class CoreGinModule extends AbstractGinModule {
         componentsBinder.addBinding("Project templates").to(ProjectTemplatesComponent.class);
         componentsBinder.addBinding("Workspace").toProvider(WorkspaceComponentProvider.class);
         componentsBinder.addBinding("Standard components").to(StandardComponent.class);
+        componentsBinder.addBinding("Contextual Commands").to(CommandProducerActionManager.class);
 
         GinMapBinder<String, WsAgentComponent> wsAgentComponentsBinder =
                 GinMapBinder.newMapBinder(binder(), String.class, WsAgentComponent.class);
@@ -589,6 +592,8 @@ public class CoreGinModule extends AbstractGinModule {
         bind(RecentFileList.class).to(RecentFileStore.class).in(Singleton.class);
 
         install(new GinFactoryModuleBuilder().build(RecentFileActionFactory.class));
+
+        install(new GinFactoryModuleBuilder().build(CommandProducerActionFactory.class));
     }
 
     /** Configures binding for Editor API */

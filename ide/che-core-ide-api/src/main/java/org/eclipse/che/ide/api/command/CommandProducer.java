@@ -26,25 +26,25 @@ import java.util.Set;
  */
 public interface CommandProducer {
 
-    /** Returns the text that would be used as related action's title. */
+    /** Returns the text that should be used as related action's title. */
     String getName();
 
     /**
      * Whether the command produced by concrete producer is applicable to the current context?
-     * <p>Returned value is used for regulating visibility of an appropriate action.
+     * Returned value is used for regulating visibility of an appropriate action.
      */
     boolean isApplicable();
 
     /**
      * Creates a command from the current context.
-     * <p>Target for command execution will be provided through {@code machine} parameter.
-     * <p>Called when user performs corresponded action.
+     * Target for command execution will be provided through {@code machine} parameter.
+     * Called when user performs corresponded action.
      */
     CommandImpl createCommand(Machine machine);
 
     /**
      * Returns machine types for restricting machines where command may be executed.
-     * <p>If returns empty set then ws-agent will be used for executing a command.
+     * If returns empty set then ws-agent will be used for executing a command.
      */
     Set<String> getMachineTypes();
 }
