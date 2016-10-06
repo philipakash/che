@@ -39,6 +39,7 @@ import org.eclipse.che.ide.api.notification.StatusNotification;
 import org.eclipse.che.ide.api.notification.StatusNotification.DisplayMode;
 import org.eclipse.che.ide.api.outputconsole.OutputConsole;
 import org.eclipse.che.ide.api.parts.WorkspaceAgent;
+import org.eclipse.che.ide.api.workspace.event.EnvironmentOutputEvent;
 import org.eclipse.che.ide.extension.machine.client.MachineLocalizationConstant;
 import org.eclipse.che.ide.extension.machine.client.MachineResources;
 import org.eclipse.che.ide.extension.machine.client.inject.factories.EntityFactory;
@@ -81,6 +82,7 @@ import static org.mockito.Mockito.when;
 @RunWith(GwtMockitoTestRunner.class)
 public class ProcessesPanelPresenterTest {
     private static final String MACHINE_ID     = "machineID";
+    private static final String MACHINE_NAME   = "machineName";
     private static final String WORKSPACE_ID   = "workspaceID";
     private static final String PROCESS_ID     = "processID";
     private static final String PROCESS_NAME   = "processName";
@@ -173,10 +175,10 @@ public class ProcessesPanelPresenterTest {
         MachineEntity machine = mock(MachineEntity.class);
         MachineConfigDto machineConfigDto = mock(MachineConfigDto.class);
         OutputConsole outputConsole = mock(OutputConsole.class);
-        when(machineConfigDto.getName()).thenReturn("machine_name");
+        when(machineConfigDto.getName()).thenReturn(MACHINE_NAME);
         when(machine.getConfig()).thenReturn(machineConfigDto);
         when(appContext.getWorkspaceId()).thenReturn(WORKSPACE_ID);
-        when(commandConsoleFactory.create(eq("machine_name"))).thenReturn(outputConsole);
+        when(commandConsoleFactory.create(eq(MACHINE_NAME))).thenReturn(outputConsole);
 
         MachineStateEvent machineStateEvent = mock(MachineStateEvent.class);
         when(machineStateEvent.getMachine()).thenReturn(machine);
@@ -189,7 +191,7 @@ public class ProcessesPanelPresenterTest {
         acceptsOneWidgetCaptor.getValue().setWidget(widget);
 
         verify(workspaceAgent).setActivePart(anyObject());
-        verify(commandConsoleFactory).create(eq("machine_name"));
+        verify(commandConsoleFactory).create(eq(MACHINE_NAME));
         verify(view).addWidget(anyString(), anyString(), anyObject(), anyObject(), anyBoolean());
         verify(view).setProcessesData(eq(presenter.rootNode));
     }
@@ -579,7 +581,7 @@ public class ProcessesPanelPresenterTest {
     }
 
     @Test
-    public void commandShouldBeRestoredWheWsAgentIsStarted() throws Exception {
+    public void commandShouldBeRestoredWhenWsAgentIsStarted() throws Exception {
         WsAgentStateEvent event = mock(WsAgentStateEvent.class);
 
         MachineEntity machineEntity = mock(MachineEntity.class);
@@ -615,5 +617,38 @@ public class ProcessesPanelPresenterTest {
 
         verify(outputConsole).listenToOutput(eq(OUTPUT_CHANNEL));
         verify(outputConsole).attachToProcess(machineProcessDto);
+    }
+
+    @Test
+    public void shouldCreateMachineNodeToPrintWsAgentOutput() throws Exception {
+        EnvironmentOutputEvent event = mock(EnvironmentOutputEvent.class);
+        when(event.getMachineName()).thenReturn(MACHINE_NAME);
+
+        MachineEntity machineEntity = mock(MachineEntity.class);
+        MachineDto machine = mock(MachineDto.class);
+        when(entityFactory.createMachine(machine)).thenReturn(machineEntity);
+        when(machineEntity.getDisplayName()).thenReturn(MACHINE_NAME);
+        when(machineEntity.getId()).thenReturn(MACHINE_ID);
+        when(machineEntity.getWorkspaceId()).thenReturn(WORKSPACE_ID);
+        MachineConfigDto machineConfigDto = mock(MachineConfigDto.class);
+        when(machineEntity.getConfig()).thenReturn(machineConfigDto);
+        when(machineConfigDto.isDev()).thenReturn(true);
+        List<MachineDto> machines = new ArrayList<>(2);
+        machines.add(machine);
+        when(workspaceRuntime.getMachines()).thenReturn(machines);
+        OutputConsole outputConsole = mock(OutputConsole.class);
+        when(machineConfigDto.getName()).thenReturn(MACHINE_NAME);
+        when(appContext.getWorkspaceId()).thenReturn(WORKSPACE_ID);
+        when(commandConsoleFactory.create(eq(MACHINE_NAME))).thenReturn(outputConsole);
+
+        presenter.onEnvironmentOutputEvent(event);
+
+        verify(outputConsole).go(acceptsOneWidgetCaptor.capture());
+        IsWidget widget = mock(IsWidget.class);
+        acceptsOneWidgetCaptor.getValue().setWidget(widget);
+
+        verify(commandConsoleFactory).create(eq(MACHINE_NAME));
+        verify(view).addWidget(anyString(), anyString(), anyObject(), anyObject(), anyBoolean());
+        verify(view).setProcessesData(eq(presenter.rootNode));
     }
 }
